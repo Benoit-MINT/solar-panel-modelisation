@@ -10,8 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_23_144656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "homes", force: :cascade do |t|
+    t.string "address"
+    t.float "longitude"
+    t.float "latitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "home_consumption_months", default: [], array: true
+    t.integer "self_consumption_months", default: [], array: true
+    t.integer "back_energy_months", default: [], array: true
+  end
+
+  create_table "photovoltaics", force: :cascade do |t|
+    t.integer "power"
+    t.bigint "home_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "ratio_months", default: [], array: true
+    t.integer "production_months", default: [], array: true
+    t.index ["home_id"], name: "index_photovoltaics_on_home_id"
+  end
+
+  add_foreign_key "photovoltaics", "homes"
 end
