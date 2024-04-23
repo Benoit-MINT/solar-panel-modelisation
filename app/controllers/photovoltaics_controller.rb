@@ -1,0 +1,2 @@
+class PhotovoltaicsController < ApplicationController
+end

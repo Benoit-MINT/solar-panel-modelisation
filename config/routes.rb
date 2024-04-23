@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :homes do
+    resources :photovoltaics, only: [:new, :create, :edit, :update]
+  end
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
