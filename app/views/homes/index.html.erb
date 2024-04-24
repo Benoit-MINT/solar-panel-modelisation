@@ -1,3 +1,11 @@
-<p>hello from homes/index</p>
+<div class="container">
+  <p>Nouveau projet</p>
 
-<p>liste de tous les projets ici:</p>
+  <%= link_to "Nouveau projet", new_home_path, class: 'btn btn-primary' %>
+
+  <p>liste de tous les projets ici:</p>
+  <%@homes.each do |home|%>
+    <%= home.address%>
+    <%= home.home_consumption_months%>
+  <%end%>
+</div>
