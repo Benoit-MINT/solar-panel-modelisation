@@ -7,5 +7,6 @@
   <%@homes.each do |home|%>
     <%= home.address%>
     <%= home.home_consumption_months%>
+    <%= link_to "Installation solaire", home_path(home), class: 'btn btn-secondary' %>
   <%end%>
 </div>
