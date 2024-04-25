@@ -24,6 +24,12 @@ class HomesController < ApplicationController
     end
   end
 
+  def destroy
+    @home = Home.find(params[:id])
+    @home.destroy
+    redirect_to homes_path, status: :see_other
+  end
+
   private
 
   def home_params
