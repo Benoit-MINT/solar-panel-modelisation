@@ -1,10 +1,12 @@
-<p>hello fron "<%=@home.address%>" show</p>
+<div class="container">
+  <p>hello fron "<%=@home.address%>" show</p>
 
-<p>ajouter une nouvelle installation solaire</p>
-<%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
+  <p>ajouter une nouvelle installation solaire</p>
+  <%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
 
-<p>Scénarios d'installation :</p>
- <%@photovoltaics.each do |photovoltaic|%>
-    <p>puissance :</p>
-    <%= photovoltaic.power%>
+  <p>Scénarios d'installation :</p>
+  <%@photovoltaics.each do |photovoltaic|%>
+      <p>Scénario à <%= photovoltaic.power%> kW/h</p>
+      <%= link_to "Supprimer", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
   <%end%>
+</div>

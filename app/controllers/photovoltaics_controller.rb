@@ -19,6 +19,13 @@ class PhotovoltaicsController < ApplicationController
     end
   end
 
+  def destroy
+    @home = Home.find(params[:home_id])
+    @photovoltaic = Photovoltaic.find(params[:id])
+    @photovoltaic.destroy
+    redirect_to home_path(@home), status: :see_other
+  end
+
   private
 
   def photovoltaic_params
