@@ -1,12 +1,14 @@
 <div class="container">
-  <h2>Habitation</h2>
+  <h2>Liste des projets</h2>
 
   <%= link_to "Nouveau projet", new_home_path, class: 'btn btn-primary' %>
 
-  <p>liste de tous les projets ici:</p>
+  <div class="mt-3">
+    <strong>Liste de tous les projets ici:</strong>
+  </div>
   <%@homes.each do |home|%>
   <div class="mt-3">
-    <%= home.address%>
+    <%= home.name%>
     <%= link_to "Installation solaire", home_path(home), class: 'btn btn-secondary' %>
     <%= link_to "Supprimer", home_path(home), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer ce projet?"} %>
   </div>
