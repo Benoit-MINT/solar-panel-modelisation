@@ -5,7 +5,7 @@ class HomesController < ApplicationController
 
   def show
     @home = Home.find(params[:id])
-    @photovoltaics = Photovoltaic.all
+    @photovoltaics = @home.photovoltaics
   end
 
   def new
