@@ -1,12 +1,19 @@
 <div class="container">
   <p>hello fron "<%=@home.address%>" show</p>
+  <%= link_to "Retour", homes_path, class: 'btn btn-secondary' %>
+  <p>Consommation du bien (kW/h) :</p>
+  <%= @home.home_consumption_months%>
 
   <p>ajouter une nouvelle installation solaire</p>
   <%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
 
   <p>Scénarios d'installation :</p>
   <%@photovoltaics.each do |photovoltaic|%>
-      <p>Scénario à <%= photovoltaic.power%> kW/h</p>
-      <%= link_to "Supprimer", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
+      <p>Scénario à <%= photovoltaic.power%> (kW/h) :</p>
+      <%= photovoltaic.production_months %>
+      <div>
+        <%= link_to "Supprimer", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
+        <%= link_to "Modifier puissance", edit_home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary' %>
+      </div>
   <%end%>
 </div>

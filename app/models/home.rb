@@ -1,5 +1,5 @@
 class Home < ApplicationRecord
-  has_one :photovoltaic
+  has_many :photovoltaics
 
   validates :address, presence: :true
   validates :home_consumption_months, presence: true
