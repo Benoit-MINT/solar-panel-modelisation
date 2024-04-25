@@ -1,4 +1,6 @@
 class PhotovoltaicsController < ApplicationController
+  require "json"
+  require "open-uri"
   SUN_TIMES = [8, 9, 10, 11, 14, 16, 15, 14, 12, 10, 9, 7]
 
   def new
@@ -13,7 +15,8 @@ class PhotovoltaicsController < ApplicationController
     (1..12).each do |ratio|
       @photovoltaic_new.ratio_months[ratio - 1] = params[:ratio][:ratio_months]["#{ratio}"].to_i
     end
-    production_calculation(@photovoltaic_new)
+    # Ligne à remplacer avec nouvelle méthode liée à l'API :
+    # production_calculation(@photovoltaic_new)
     self_consumption_calculation(@home, @photovoltaic_new)
     back_energy_calculation(@photovoltaic_new)
     if @photovoltaic_new.save
@@ -32,7 +35,9 @@ class PhotovoltaicsController < ApplicationController
     @home = Home.find(params[:home_id])
     @photovoltaic = Photovoltaic.find(params[:id])
     @photovoltaic.update(photovoltaic_params)
-    production_calculation(@photovoltaic)
+    # Ligne à remplacer avec nouvelle méthode liée à l'API :
+    # production_calculation(@photovoltaic)
+    photovoltaic_production_pvgis(@photovoltaic)
     self_consumption_calculation(@home, @photovoltaic)
     back_energy_calculation(@photovoltaic)
     @photovoltaic.save
@@ -56,6 +61,19 @@ class PhotovoltaicsController < ApplicationController
     (0..11).each do |month|
       photovoltaic.production_months[month] = (photovoltaic.power * photovoltaic.ratio_months[month]).to_i
     end
+  end
+
+  def photovoltaic_production_pvgis(photovoltaic)
+    url = "https://re.jrc.ec.europa.eu/api/PVcalc?lat=45.815&lon=8.611&peakpower=#{photovoltaic.power}&loss=12"
+    data_pvgis_serialized = URI.open(url).read
+    data_pvgis_lines = data_pvgis_serialized.split("\r\n")[10..21]
+    data_pvgis_array = data_pvgis_lines.map{ |line| line.split("\t") }
+    data_pvgis_array.map! { |data| data.reject(&:empty?) }
+    photovoltaic_production = []
+    data_pvgis_array.each do |data_month|
+      photovoltaic_production << data_month[2]
+    end
+    raise
   end
 
   def self_consumption_calculation(home, photovoltaic)
