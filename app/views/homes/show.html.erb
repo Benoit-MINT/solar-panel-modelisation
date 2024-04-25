@@ -7,10 +7,12 @@
   <p>ajouter une nouvelle installation solaire</p>
   <%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
 
-  <p>Scénarios d'installation :</p>
+  <h3 class="mt-3">Scénarios d'installation :</h3>
   <%@photovoltaics.each do |photovoltaic|%>
-      <p>Scénario à <%= photovoltaic.power%> (kW/h) :</p>
-      <%= photovoltaic.production_months %>
+      <strong>Scénario à <%= photovoltaic.power%> kWc :</strong>
+      <p>Production mensuelle (kW/h) : <%= photovoltaic.production_months %></p>
+      <p>Production autoconsommée (kW/h) : <%=photovoltaic.self_consumption_months%> </p>
+      <p>Renvoi sur le réseau (kW/h) : <%=photovoltaic.back_energy_months%> </p>
       <div>
         <%= link_to "Supprimer", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
         <%= link_to "Modifier puissance", edit_home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary' %>
