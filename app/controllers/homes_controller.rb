@@ -1,4 +1,5 @@
 class HomesController < ApplicationController
+
   def index
     @homes = Home.all
   end
@@ -24,6 +25,20 @@ class HomesController < ApplicationController
     end
   end
 
+  def edit
+    @home = Home.find(params[:id])
+  end
+
+  def update
+    @home = Home.find(params[:id])
+    @home.update(home_params)
+    (1..12).each do |month|
+      @home.home_consumption_months[month - 1] = params[:home][:home_consumption_months]["#{month}"].to_f
+    end
+    @home.save
+    redirect_to home_path(@home), alert: "Projet actualisé!"
+  end
+
   def destroy
     @home = Home.find(params[:id])
     @home.destroy
@@ -33,7 +48,7 @@ class HomesController < ApplicationController
   private
 
   def home_params
-    params.require(:home).permit(:address)
+    params.require(:home).permit(:name, :address)
   end
 
 end
