@@ -1,5 +1,5 @@
 class PhotovoltaicsController < ApplicationController
-  SUN_TIMES = [9, 10, 11, 13, 14, 16, 16, 14, 13, 11, 10, 9]
+  SUN_TIMES = [8, 9, 10, 11, 14, 16, 15, 14, 12, 10, 9, 7]
 
   def new
     @home = Home.find(params[:home_id])
@@ -15,7 +15,7 @@ class PhotovoltaicsController < ApplicationController
     end
     production_calculation(@photovoltaic_new)
     self_consumption_calculation(@home, @photovoltaic_new)
-    back_energy_calculation(@photovoltaic)
+    back_energy_calculation(@photovoltaic_new)
     if @photovoltaic_new.save
       redirect_to home_path(@home), alert: "L'installation est créée"
     else
@@ -64,10 +64,15 @@ class PhotovoltaicsController < ApplicationController
     (0..11).each do |month|
       instant_power_consumption[month] = (home.home_consumption_months[month] * 100 * 12 / 365 / 24)/100.to_f
     end
-    # hypothèse 2 : courbe de production est de type créneau, où Pmax = Pcrète, et t = (temps ensoleillement / 2)
-    # donc : t correspond à la période où l'énergie solaire produite est consommée par le bien
+    # hypothèse 2 : courbe de production est de type créneau
     (0..11).each do |month|
-      photovoltaic.self_consumption_months[month] = (instant_power_consumption[month] * (SUN_TIMES[month] / 2) * (365/12)).to_i
+      # si la puissance crète est supérieure à la conso de base :
+      if photovoltaic.power > instant_power_consumption[month]
+        photovoltaic.self_consumption_months[month] = (instant_power_consumption[month] / photovoltaic.power) * photovoltaic.production_months[month]
+      # sinon la puissance crète est alors inférieure à la conso de base :
+      else
+        photovoltaic.self_consumption_months[month] = photovoltaic.production_months[month]
+      end
     end
   end
 
