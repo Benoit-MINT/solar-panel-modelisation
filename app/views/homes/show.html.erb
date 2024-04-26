@@ -1,14 +1,20 @@
 <div class="container">
   <h2>Projet : <%=@home.name%></h2>
+  <%= link_to "Retour", homes_path, class: 'btn btn-secondary' %>
   <p>Localisation : <%=@home.address%></p>
+  <p>Coordonnées : <%=@home.latitude%> - <%=@home.longitude%> </p>
 
-      <p>Consommation du bien (kW/h) : <%= @home.home_consumption_months%></p>
+  <div id="map" data-controller="map-home">
+    <div data-map-home-target="lat" data-value = "<%= @home.latitude %>"> </div>
+    <div data-map-home-target="long" data-value = "<%= @home.longitude %>"> </div>
+  </div>
+
+  <p>Consommation du bien (kW/h) : <%= @home.home_consumption_months%></p>
   <canvas data-controller="consumption-chart">
     <div data-consumption-chart-target="consumptionHome" data-value = "<%= @home.home_consumption_months %>"> </div>
   </canvas>
   <%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
   <%= link_to "Modifier projet", edit_home_path(@home), class: 'btn btn-secondary' %>
-  <%= link_to "Retour", homes_path, class: 'btn btn-secondary' %>
 
   <h4 class="mt-3">Scénarios d'installation :</h4>
   <%@photovoltaics.each do |photovoltaic|%>
