@@ -1,0 +1,8 @@
+"hello from show photo"
+<%= link_to "Retour", home_path(@home), class: 'btn btn-secondary' %>
+
+<h3>Production solaire</h3>
+<p>Données : <%= @photovoltaic.production_months %> </p>
+<canvas data-controller="production-chart">
+    <div data-production-chart-target="solarProduction" data-value = "<%= @photovoltaic.production_months %>"> </div>
+</canvas>

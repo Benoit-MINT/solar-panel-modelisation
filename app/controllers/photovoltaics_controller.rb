@@ -6,6 +6,11 @@ class PhotovoltaicsController < ApplicationController
     @photovoltaic_new = Photovoltaic.new
   end
 
+  def show
+    @home = Home.find(params[:home_id])
+    @photovoltaic = Photovoltaic.find(params[:id])
+  end
+
   def create
     @home = Home.find(params[:home_id])
     @photovoltaic_new = Photovoltaic.new(photovoltaic_params)
@@ -18,7 +23,7 @@ class PhotovoltaicsController < ApplicationController
 
     # Ligne à remplacer avec nouvelle méthode liée à l'API PVGIS:
     # production_calculation(@photovoltaic_new)
-    photovoltaic_production_pvgis(@photovoltaic_new)
+    photovoltaic_production_pvgis(@home, @photovoltaic_new)
 
     self_consumption_calculation(@home, @photovoltaic_new)
     back_energy_calculation(@photovoltaic_new)
@@ -42,7 +47,7 @@ class PhotovoltaicsController < ApplicationController
     # Ligne à remplacer avec nouvelle méthode liée à l'API :
     # production_calculation(@photovoltaic)
 
-    photovoltaic_production_pvgis(@photovoltaic)
+    photovoltaic_production_pvgis(@home, @photovoltaic)
     self_consumption_calculation(@home, @photovoltaic)
     back_energy_calculation(@photovoltaic)
     @photovoltaic.save
@@ -70,8 +75,8 @@ class PhotovoltaicsController < ApplicationController
   #   end
   # end
 
-  def photovoltaic_production_pvgis(photovoltaic)
-    url = "https://re.jrc.ec.europa.eu/api/PVcalc?lat=45.815&lon=8.611&peakpower=#{photovoltaic.power}&loss=14"
+  def photovoltaic_production_pvgis(home, photovoltaic)
+    url = "https://re.jrc.ec.europa.eu/api/PVcalc?lat=#{home.latitude}&lon=#{home.longitude}&peakpower=#{photovoltaic.power}&loss=14"
     data_pvgis_serialized = URI.open(url).read
     data_pvgis_lines = data_pvgis_serialized.split("\r\n")[10..21]
     data_pvgis_array = data_pvgis_lines.map{ |line| line.split("\t") }
