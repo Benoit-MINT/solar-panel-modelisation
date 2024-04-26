@@ -1,18 +1,1 @@
-<div class="container">
-  <h2>Nouveau projet</h2>
-
-  <%= simple_form_for @home_new do |f| %>
-    <%= f.input :name %>
-    <div data-controller="address-autocomplete">
-      <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}} %>
-      <ul data-address-autocomplete-target="suggestions">
-      </ul>
-    </div>
-    <div>
-      <% (1..12).each do |month| %>
-        <%= f.input "home_consumption_months[]", input_html: { name: "home[home_consumption_months][#{month}]", value: nil }, label: "Month #{month}" %>
-      <% end %>
-    </div>
-    <%= f.submit 'Save', class: 'btn btn-primary' %>
-  <% end %>
-</div>
+<%= render "form", home: @home_new %>
