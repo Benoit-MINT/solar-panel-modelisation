@@ -1,9 +1,11 @@
 <div class="container">
   <h2>Projet : <%=@home.name%></h2>
   <p>Localisation : <%=@home.address%></p>
-  <div data-controller="consumption-chart">
-    <p>Consommation du bien (kW/h) : <%= @home.home_consumption_months%></p>
-  </div>
+
+      <p>Consommation du bien (kW/h) : <%= @home.home_consumption_months%></p>
+  <canvas data-controller="consumption-chart">
+    <div data-consumption-chart-target="consumptionHome" data-value = "<%= @home.home_consumption_months %>"> </div>
+  </canvas>
   <%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
   <%= link_to "Modifier projet", edit_home_path(@home), class: 'btn btn-secondary' %>
   <%= link_to "Retour", homes_path, class: 'btn btn-secondary' %>
