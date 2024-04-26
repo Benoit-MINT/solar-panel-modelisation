@@ -2,6 +2,7 @@ class HomesController < ApplicationController
 
   def index
     @homes = Home.all
+    @home_new = Home.new
   end
 
   def show
