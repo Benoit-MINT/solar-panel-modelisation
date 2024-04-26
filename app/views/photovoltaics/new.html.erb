@@ -3,9 +3,10 @@
 
   <%= simple_form_for [@home, @photovoltaic_new] do |f| %>
     <%= f.input :power %>
-    <% (1..12).each do |ratio| %>
-      <%= f.input "ratio_months[]", input_html: { name: "ratio[ratio_months][#{ratio}]", value: nil }, label: "Ratio month #{ratio}" %>
-    <% end %>
+    <%# PLus nécessaire avec l'appel API PVGIS %>
+    <%# <% (1..12).each do |ratio| %>
+      <%# <%= f.input "ratio_months[]", input_html: { name: "ratio[ratio_months][#{ratio}]", value: nil }, label: "Ratio month #{ratio}"  %>
+    <%# <% end %>
     <%= f.submit 'Save', class: 'btn btn-primary' %>
   <% end %>
 </div>

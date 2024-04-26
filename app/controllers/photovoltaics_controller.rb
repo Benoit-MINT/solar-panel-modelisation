@@ -1,5 +1,5 @@
 class PhotovoltaicsController < ApplicationController
-  SUN_TIMES = [8, 9, 10, 11, 14, 16, 15, 14, 12, 10, 9, 7]
+  require "open-uri"
 
   def new
     @home = Home.find(params[:home_id])
@@ -10,10 +10,16 @@ class PhotovoltaicsController < ApplicationController
     @home = Home.find(params[:home_id])
     @photovoltaic_new = Photovoltaic.new(photovoltaic_params)
     @photovoltaic_new.home_id = @home.id
-    (1..12).each do |ratio|
-      @photovoltaic_new.ratio_months[ratio - 1] = params[:ratio][:ratio_months]["#{ratio}"].to_i
-    end
-    production_calculation(@photovoltaic_new)
+
+    # Plus nécessaire avec le recours à l'API PVGIS:
+    # (1..12).each do |ratio|
+    #   @photovoltaic_new.ratio_months[ratio - 1] = params[:ratio][:ratio_months]["#{ratio}"].to_i
+    # end
+
+    # Ligne à remplacer avec nouvelle méthode liée à l'API PVGIS:
+    # production_calculation(@photovoltaic_new)
+    photovoltaic_production_pvgis(@photovoltaic_new)
+
     self_consumption_calculation(@home, @photovoltaic_new)
     back_energy_calculation(@photovoltaic_new)
     if @photovoltaic_new.save
@@ -32,7 +38,11 @@ class PhotovoltaicsController < ApplicationController
     @home = Home.find(params[:home_id])
     @photovoltaic = Photovoltaic.find(params[:id])
     @photovoltaic.update(photovoltaic_params)
-    production_calculation(@photovoltaic)
+
+    # Ligne à remplacer avec nouvelle méthode liée à l'API :
+    # production_calculation(@photovoltaic)
+
+    photovoltaic_production_pvgis(@photovoltaic)
     self_consumption_calculation(@home, @photovoltaic)
     back_energy_calculation(@photovoltaic)
     @photovoltaic.save
@@ -46,15 +56,28 @@ class PhotovoltaicsController < ApplicationController
     redirect_to home_path(@home), status: :see_other
   end
 
+
   private
 
   def photovoltaic_params
     params.require(:photovoltaic).permit(:power)
   end
 
-  def production_calculation(photovoltaic)
-    (0..11).each do |month|
-      photovoltaic.production_months[month] = (photovoltaic.power * photovoltaic.ratio_months[month]).to_i
+  # Ancienne méthode de calcul de production solaire : via ratio sur https://www.photovoltaique.info/fr/carte-interactive-de-productible-mensuel/
+  # def production_calculation(photovoltaic)
+  #   (0..11).each do |month|
+  #     photovoltaic.production_months[month] = (photovoltaic.power * photovoltaic.ratio_months[month]).to_i
+  #   end
+  # end
+
+  def photovoltaic_production_pvgis(photovoltaic)
+    url = "https://re.jrc.ec.europa.eu/api/PVcalc?lat=45.815&lon=8.611&peakpower=#{photovoltaic.power}&loss=14"
+    data_pvgis_serialized = URI.open(url).read
+    data_pvgis_lines = data_pvgis_serialized.split("\r\n")[10..21]
+    data_pvgis_array = data_pvgis_lines.map{ |line| line.split("\t") }
+    data_pvgis_array.map! { |data| data.reject(&:empty?) }
+    data_pvgis_array.each_with_index do |data_month, month|
+      photovoltaic.production_months[month] = data_month[2].to_f
     end
   end
 
@@ -68,7 +91,7 @@ class PhotovoltaicsController < ApplicationController
     (0..11).each do |month|
       # si la puissance crète est supérieure à la conso de base :
       if photovoltaic.power > instant_power_consumption[month]
-        photovoltaic.self_consumption_months[month] = (instant_power_consumption[month] / photovoltaic.power) * photovoltaic.production_months[month]
+        photovoltaic.self_consumption_months[month] = ((instant_power_consumption[month] / photovoltaic.power) * photovoltaic.production_months[month]).round(2)
       # sinon la puissance crète est alors inférieure à la conso de base :
       else
         photovoltaic.self_consumption_months[month] = photovoltaic.production_months[month]
@@ -78,7 +101,7 @@ class PhotovoltaicsController < ApplicationController
 
   def back_energy_calculation(photovoltaic)
     (0..11).each do |month|
-      photovoltaic.back_energy_months[month] = photovoltaic.production_months[month] - photovoltaic.self_consumption_months[month]
+      photovoltaic.back_energy_months[month] = (photovoltaic.production_months[month] - photovoltaic.self_consumption_months[month]).round(2)
     end
   end
 end
