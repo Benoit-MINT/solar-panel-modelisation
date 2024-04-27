@@ -1,5 +1,5 @@
 class Home < ApplicationRecord
-  has_many :photovoltaics
+  has_many :photovoltaics, dependent: :destroy
 
   validates :name, presence: :true
   validates :address, presence: :true
