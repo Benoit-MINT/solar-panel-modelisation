@@ -55,7 +55,7 @@ class HomesController < ApplicationController
   private
 
   def home_params
-    params.require(:home).permit(:name, :address)
+    params.require(:home).permit(:name, :address, :buy_price_electricity, :sale_price_electricity)
   end
 
   def handle_uploaded_csv(home, file)

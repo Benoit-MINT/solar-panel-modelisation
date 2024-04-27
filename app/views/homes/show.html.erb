@@ -2,14 +2,13 @@
   <h2>Projet : <%=@home.name%></h2>
   <%= link_to "Retour", homes_path, class: 'btn btn-secondary' %>
   <p>Localisation : <%=@home.address%></p>
-  <p>Coordonnées : <%=@home.latitude%> - <%=@home.longitude%> </p>
 
   <div id="map" data-controller="map-home">
     <div data-map-home-target="lat" data-value = "<%= @home.latitude %>"> </div>
     <div data-map-home-target="long" data-value = "<%= @home.longitude %>"> </div>
   </div>
 
-  <p>Consommation du bien (kW/h) : <%= @home.home_consumption_months%></p>
+  <p>Consommation annuel (kW/h) : <%= @home.home_consumption_months.sum.to_i%></p>
   <p>Budget électrique annuel = TODO</p>
   <canvas data-controller="consumption-chart">
     <div data-consumption-chart-target="consumptionHome" data-value = "<%= @home.home_consumption_months %>"> </div>
