@@ -38,8 +38,9 @@
 
       <div>
         <strong>Caractéristiques de l'installation</strong>
-        <p>Nombre de panneaux solaires :</p>
-        <p>Surface utile :</p>
+        <% nb_solar_panel = (photovoltaic.power / Photovoltaic::POWER_BY_PANEL).ceil %>
+        <p>Nombre de panneaux solaires : <%= nb_solar_panel %> </p>
+        <p>Surface utile : <%= (nb_solar_panel * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
       </div>
 
       <div>
