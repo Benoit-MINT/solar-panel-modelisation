@@ -5,12 +5,21 @@
     <%= f.input :name %>
     <div data-controller="address-autocomplete">
       <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}} %>
+      <%# piste pour le front : <%= f.input :rating, collection: ['Good', 'Very Good', 'Excellent'] %>
+      <%# voir : https://kitt.lewagon.com/knowledge/cheatsheets/simple_form %>
+      <%# voir aussi : https://kitt.lewagon.com/camps/1446/lectures/06-Projects%2F02-i18n %>
+      <%# une autre idée : carte en temps réel de points %>
       <ul data-address-autocomplete-target="suggestions">
       </ul>
     </div>
+    <div class="mb-5">
+      <strong>Ajouter des données Linky :</strong>
+      <%= f.input :file, as: :file %>
+    </div>
     <div>
+    <strong>Ajouter les données manuellement :</strong>
       <% (1..12).each do |month| %>
-        <%= f.input "home_consumption_months[]", input_html: { name: "home[home_consumption_months][#{month}]", value: home.home_consumption_months[month - 1]}, label: "Month #{month}" %>
+        <%= f.input "home_consumption_months[]", input_html: { name: "home[home_consumption_months][#{month}]", value: home.home_consumption_months[month - 1]}, label: "#{Date::MONTHNAMES[month]}" %>
       <% end %>
     </div>
     <%= f.submit 'Save', class: 'btn btn-primary' %>

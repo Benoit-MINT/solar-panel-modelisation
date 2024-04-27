@@ -1,4 +1,5 @@
 class HomesController < ApplicationController
+  require "csv"
 
   def index
     @homes = Home.all
@@ -16,8 +17,13 @@ class HomesController < ApplicationController
 
   def create
     @home_new = Home.new(home_params)
-    (1..12).each do |month|
-      @home_new.home_consumption_months[month - 1] = params[:home][:home_consumption_months]["#{month}"].to_f
+
+    if params[:home][:file].present?
+      handle_uploaded_csv(@home_new, params[:home][:file])
+    else
+      (1..12).each do |month|
+        @home_new.home_consumption_months[month - 1] = params[:home][:home_consumption_months]["#{month}"].to_i
+      end
     end
     if @home_new.save
       redirect_to homes_path, alert: "Le projet est créé"
@@ -50,6 +56,14 @@ class HomesController < ApplicationController
 
   def home_params
     params.require(:home).permit(:name, :address)
+  end
+
+  def handle_uploaded_csv(home, file)
+    linky_data = []
+    CSV.foreach(file) do |row|
+      linky_data << row[1..-1]
+    end
+    home.home_consumption_months = linky_data[1].map!(&:to_i)
   end
 
 end
