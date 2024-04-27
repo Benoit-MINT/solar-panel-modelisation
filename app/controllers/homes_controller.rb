@@ -60,10 +60,13 @@ class HomesController < ApplicationController
 
   def handle_uploaded_csv(home, file)
     linky_data = []
-    CSV.foreach(file) do |row|
-      linky_data << row[1..-1]
+    CSV.foreach(file, encoding: 'utf-8') do |row|
+      linky_data << row
     end
-    home.home_consumption_months = linky_data[1].map!(&:to_i)
+    filtered_data = linky_data.select { |row| row[0]&.start_with?(/^\d/) }
+    filtered_data.map! { |row| row[0].split(';').slice(0, 2) }
+    filtered_data.select! { |row| row[0].include?("2023") }
+    home.home_consumption_months = filtered_data.map { |row| row[1].to_i }.reverse
   end
 
 end
