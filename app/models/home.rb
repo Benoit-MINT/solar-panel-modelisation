@@ -12,4 +12,11 @@ class Home < ApplicationRecord
   # on limite les appels sur l'API :
   after_validation :geocode, if: :will_save_change_to_address?
 
+  # after_update :update_photovoltaics
+
+  private
+  def update_photovoltaics
+    photovoltaics.each(&:update_attributes_dependent_on_home)
+  end
+
 end
