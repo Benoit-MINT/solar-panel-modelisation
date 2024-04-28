@@ -9,6 +9,20 @@ class Photovoltaic < ApplicationRecord
 
   validates :power, presence: true
 
+  def update_attributes_dependent_on_home
+    home = self.home
+    # si on change l'adresse de home :
+    self.photovoltaic_production_pvgis(home)
+    # si l'on change les données de consommation de home :
+    self.self_consumption_calculation(home)
+    # si l'on fait au moins un des chgts ci-dessus :
+    self.back_energy_calculation
+    # si l'on change Notamment le prix de l'élec :
+    self.economics_calculation(home)
+
+    self.save
+  end
+
   def photovoltaic_production_pvgis(home)
     url = "https://re.jrc.ec.europa.eu/api/PVcalc?lat=#{home.latitude}&lon=#{home.longitude}&peakpower=#{self.power}&loss=14"
     data_pvgis_serialized = URI.open(url).read
@@ -57,13 +71,4 @@ class Photovoltaic < ApplicationRecord
     self.annual_performance = ((self.self_electricity_months.sum + self.sale_electricity_months.sum) / self.investment * 100).round(2)
     self.global_performance = (((self.investment + self.profit) - self.investment) / self.investment * 100).round(2)
   end
-
-  # A FAIRE : update des instances de photovoltaics dès lors qu'une Home est update
-
-  # def update_attributes_dependent_on_home
-  #   # Mettez à jour les attributs de Photovoltaic en fonction des attributs de Home
-  #   # Par exemple :
-  #   self.some_attribute = home.some_attribute * 2
-  #   save # Enregistrer les modifications
-  # end
 end
