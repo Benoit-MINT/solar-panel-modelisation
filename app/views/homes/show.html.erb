@@ -9,7 +9,7 @@
   </div>
 
   <p>Consommation annuel (kW/h) : <%= @home.home_consumption_months.sum.to_i%></p>
-  <p>Budget électrique annuel : <%= (@home.home_consumption_months.sum * @home.buy_price_electricity).to_i%> €</p>
+  <p>Budget électrique annuel : <%= @home.price_consumption_months.sum.to_i%> €</p>
   <canvas data-controller="consumption-chart">
     <div data-consumption-chart-target="consumptionHome" data-value = "<%= @home.home_consumption_months %>"> </div>
   </canvas>

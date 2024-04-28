@@ -18,13 +18,11 @@ export default class extends Controller {
     var self_consumption_data_json = JSON.parse(self_consumption_data)
 
     var consumption_network_data_json = [];
-    for (let i = 0; i < home_consumption_data_json.length; i++) {
+    for (let i = 0; i < labels.length; i++) {
       consumption_network_data_json.push(home_consumption_data_json[i] - self_consumption_data_json[i]);
     }
 
-    console.log(consumption_network_data_json)
-
-    const data_test = {
+    const data = {
       labels: labels,
       datasets: [{
           label: 'Autoconsommation',
@@ -49,9 +47,9 @@ export default class extends Controller {
       }]
     };
 
-    const config_test = {
+    const config = {
       type: 'bar',
-      data: data_test,
+      data: data,
       options: {
         scales: {
           x: {
@@ -66,7 +64,7 @@ export default class extends Controller {
 
     new Chart(
       this.element,
-      config_test
+      config
     );
   }
 }
