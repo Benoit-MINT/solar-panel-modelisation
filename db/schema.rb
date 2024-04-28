@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_28_061657) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_28_080240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_28_061657) do
     t.float "roi"
     t.float "sale_electricity_months", default: [], array: true
     t.float "self_electricity_months", default: [], array: true
+    t.float "profit"
     t.index ["home_id"], name: "index_photovoltaics_on_home_id"
   end
 

@@ -103,5 +103,7 @@ class PhotovoltaicsController < ApplicationController
     # hypothèse : calcul de l'investissement = power(kWc) * 3500 -> produit + installation
     photovoltaic.investment = (photovoltaic.power * 3500).to_i
     photovoltaic.roi = (photovoltaic.investment / (photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum)).round(1)
+    # hypothèse : calcul du profit final sur une base de durée de vie de panneau de 45 ans
+    photovoltaic.profit = (((photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum) * 45) - photovoltaic.investment).to_i
   end
 end
