@@ -105,5 +105,7 @@ class PhotovoltaicsController < ApplicationController
     photovoltaic.roi = (photovoltaic.investment / (photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum)).round(1)
     # hypothèse : calcul du profit final sur une base de durée de vie de panneau de 45 ans
     photovoltaic.profit = (((photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum) * 45) - photovoltaic.investment).to_i
+    photovoltaic.annual_performance = ((photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum) / photovoltaic.investment * 100).round(2)
+    photovoltaic.global_performance = (((photovoltaic.investment + photovoltaic.profit) - photovoltaic.investment) / photovoltaic.investment * 100).round(2)
   end
 end
