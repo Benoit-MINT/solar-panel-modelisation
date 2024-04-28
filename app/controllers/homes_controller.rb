@@ -9,6 +9,7 @@ class HomesController < ApplicationController
   def show
     @home = Home.find(params[:id])
     @photovoltaics = @home.photovoltaics
+    @overview_energy_data = overview_energy_data(@photovoltaics)
   end
 
   def new
@@ -67,6 +68,21 @@ class HomesController < ApplicationController
 
   def home_params
     params.require(:home).permit(:name, :address, :buy_price_electricity, :sale_price_electricity)
+  end
+
+  def overview_energy_data(photovoltaics)
+    power = []
+    overview_production = []
+    overview_self_consumption = []
+    overview_back_energy = []
+    photovoltaics.each do |photovoltaic|
+      power << photovoltaic.power
+      overview_production << photovoltaic.production_months.sum.to_i
+      overview_self_consumption << photovoltaic.self_consumption_months.sum.to_i
+      overview_back_energy << photovoltaic.back_energy_months.sum.to_i
+    end
+    return [power, overview_production, overview_self_consumption, overview_back_energy].transpose.sort_by(&:first).transpose
+
   end
 
   # def handle_uploaded_csv(home, file)
