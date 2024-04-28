@@ -1,11 +1,25 @@
 <div class="container p-4">
+  <h3>Scénario à <%= @photovoltaic.power %> kW/h </h3>
   <%= link_to "Retour", home_path(@home), class: 'btn btn-secondary' %>
 
-  <h3>Scénario à <%= @photovoltaic.power %> kW/h </h3>
-  <canvas data-controller="production-chart" class="p-5">
+  <div class="p-5">
+    <strong>Bilan énergétique :</strong>
+    <canvas data-controller="production-chart">
       <div data-production-chart-target="homeConsumption" data-value = "<%= @home.home_consumption_months %>"> </div>
       <div data-production-chart-target="solarProduction" data-value = "<%= @photovoltaic.production_months %>"> </div>
       <div data-production-chart-target="selfConsumption" data-value = "<%= @photovoltaic.self_consumption_months %>"> </div>
       <div data-production-chart-target="backEnergy" data-value = "<%= @photovoltaic.back_energy_months %>"> </div>
-  </canvas>
+    </canvas>
+  </div>
+
+  <div class="p-5">
+    <strong>Bilan financier :</strong>
+    <canvas data-controller="financial-chart">
+      <div data-financial-chart-target="homeConsumption" data-value = "<%= @home.home_consumption_months %>"> </div>
+      <div data-financial-chart-target="solarProduction" data-value = "<%= @photovoltaic.production_months %>"> </div>
+      <div data-financial-chart-target="selfConsumption" data-value = "<%= @photovoltaic.self_consumption_months %>"> </div>
+      <div data-financial-chart-target="backEnergy" data-value = "<%= @photovoltaic.back_energy_months %>"> </div>
+    </canvas>
+  </div>
+
 </div>
