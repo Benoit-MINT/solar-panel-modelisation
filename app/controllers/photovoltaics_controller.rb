@@ -16,17 +16,10 @@ class PhotovoltaicsController < ApplicationController
     @photovoltaic_new = Photovoltaic.new(photovoltaic_params)
     @photovoltaic_new.home_id = @home.id
 
-    # Plus nécessaire avec le recours à l'API PVGIS:
-    # (1..12).each do |ratio|
-    #   @photovoltaic_new.ratio_months[ratio - 1] = params[:ratio][:ratio_months]["#{ratio}"].to_i
-    # end
-
-    # Ligne à remplacer avec nouvelle méthode liée à l'API PVGIS:
-    # production_calculation(@photovoltaic_new)
     photovoltaic_production_pvgis(@home, @photovoltaic_new)
-
     self_consumption_calculation(@home, @photovoltaic_new)
     back_energy_calculation(@photovoltaic_new)
+
     if @photovoltaic_new.save
       redirect_to home_path(@home), alert: "L'installation est créée"
     else
@@ -44,12 +37,11 @@ class PhotovoltaicsController < ApplicationController
     @photovoltaic = Photovoltaic.find(params[:id])
     @photovoltaic.update(photovoltaic_params)
 
-    # Ligne à remplacer avec nouvelle méthode liée à l'API :
-    # production_calculation(@photovoltaic)
-
     photovoltaic_production_pvgis(@home, @photovoltaic)
     self_consumption_calculation(@home, @photovoltaic)
     back_energy_calculation(@photovoltaic)
+    economics_calculation(@home, @photovoltaic)
+
     @photovoltaic.save
     redirect_to home_path(@home), alert: "Nouvelle puissance d'installation #{params[:photovoltaic][:power]}€"
   end
@@ -67,13 +59,6 @@ class PhotovoltaicsController < ApplicationController
   def photovoltaic_params
     params.require(:photovoltaic).permit(:power)
   end
-
-  # Ancienne méthode de calcul de production solaire : via ratio sur https://www.photovoltaique.info/fr/carte-interactive-de-productible-mensuel/
-  # def production_calculation(photovoltaic)
-  #   (0..11).each do |month|
-  #     photovoltaic.production_months[month] = (photovoltaic.power * photovoltaic.ratio_months[month]).to_i
-  #   end
-  # end
 
   def photovoltaic_production_pvgis(home, photovoltaic)
     url = "https://re.jrc.ec.europa.eu/api/PVcalc?lat=#{home.latitude}&lon=#{home.longitude}&peakpower=#{photovoltaic.power}&loss=14"
@@ -108,5 +93,19 @@ class PhotovoltaicsController < ApplicationController
     (0..11).each do |month|
       photovoltaic.back_energy_months[month] = (photovoltaic.production_months[month] - photovoltaic.self_consumption_months[month]).round(2)
     end
+  end
+
+  def economics_calculation(home, photovoltaic)
+    (0..11).each do |month|
+      photovoltaic.self_electricity_months[month] = (photovoltaic.self_consumption_months[month] * home.buy_price_electricity).round(2)
+      photovoltaic.sale_electricity_months[month] = (photovoltaic.back_energy_months[month] * home.sale_price_electricity).round(2)
+    end
+    # hypothèse : calcul de l'investissement = power(kWc) * 3500 -> produit + installation
+    photovoltaic.investment = (photovoltaic.power * 3500).to_i
+    photovoltaic.roi = (photovoltaic.investment / (photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum)).round(1)
+    # hypothèse : calcul du profit final sur une base de durée de vie de panneau de 45 ans
+    photovoltaic.profit = (((photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum) * 45) - photovoltaic.investment).to_i
+    photovoltaic.annual_performance = ((photovoltaic.self_electricity_months.sum + photovoltaic.sale_electricity_months.sum) / photovoltaic.investment * 100).round(2)
+    photovoltaic.global_performance = (((photovoltaic.investment + photovoltaic.profit) - photovoltaic.investment) / photovoltaic.investment * 100).round(2)
   end
 end

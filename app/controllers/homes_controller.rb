@@ -25,6 +25,9 @@ class HomesController < ApplicationController
         @home_new.home_consumption_months[month - 1] = params[:home][:home_consumption_months]["#{month}"].to_i
       end
     end
+
+    price_consumption_calculation(@home_new)
+
     if @home_new.save
       redirect_to homes_path, alert: "Le projet est créé"
     else
@@ -42,6 +45,7 @@ class HomesController < ApplicationController
     (1..12).each do |month|
       @home.home_consumption_months[month - 1] = params[:home][:home_consumption_months]["#{month}"].to_f
     end
+    price_consumption_calculation(@home)
     @home.save
     redirect_to home_path(@home), alert: "Projet actualisé!"
   end
@@ -55,7 +59,7 @@ class HomesController < ApplicationController
   private
 
   def home_params
-    params.require(:home).permit(:name, :address)
+    params.require(:home).permit(:name, :address, :buy_price_electricity, :sale_price_electricity)
   end
 
   def handle_uploaded_csv(home, file)
@@ -69,4 +73,9 @@ class HomesController < ApplicationController
     home.home_consumption_months = filtered_data.map { |row| row[1].to_i }.reverse
   end
 
+  def price_consumption_calculation(home)
+    (0..11).each do |month|
+      home.price_consumption_months[month] = (home.home_consumption_months[month] * home.buy_price_electricity).round(2)
+    end
+  end
 end
