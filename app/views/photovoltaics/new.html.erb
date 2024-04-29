@@ -1,0 +1,11 @@
+<div class="container my-5">
+  <div class="my-4">
+    <strong>Voici l'installation parfaite !</strong>
+
+  </div>
+
+  <%= simple_form_for [@home, @photovoltaic_new] do |f| %>
+    <% f.input :power %>
+    <%= f.submit 'Ajouter cette installation', class: 'btn btn-secondary' %>
+  <% end %>
+</div>
