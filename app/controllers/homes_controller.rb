@@ -9,6 +9,7 @@ class HomesController < ApplicationController
   def show
     @home = Home.find(params[:id])
     @photovoltaics = @home.photovoltaics
+    @photovoltaic_new = Photovoltaic.new
     @overview_energy_data = overview_energy_data(@photovoltaics)
     @overview_financial_data = overview_financial_data(@photovoltaics)
   end

@@ -15,8 +15,11 @@
   </canvas>
 
   <div class="mt-3">
-    <%= link_to "Nouvelle installation", new_home_photovoltaic_path(@home), class: 'btn btn-primary' %>
     <%= link_to "Modifier projet", edit_home_path(@home), class: 'btn btn-secondary' %>
+    <div>
+      <strong>Ajouter un nouveau scénario</strong>
+      <%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic_new %>
+    </div>
   </div>
 
   <h4 class="mt-5">Scénarios d'installation :</h4>
