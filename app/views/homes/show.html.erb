@@ -69,9 +69,13 @@
     <%# contenu :%>
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="pills-financial" role="tabpanel" aria-labelledby="pills-financial-tab" tabindex="0">
-        <canvas data-controller="financial-overview">
-          <div data-financial-overview-target="" data-value = "<%= %>"> </div>
-        </canvas>
+        <div data-controller="financial-overview" >
+          <div data-financial-overview-target="overviewFinancial" data-value = "<%= @overview_financial_data %>"> </div>
+          <canvas data-financial-overview-target="investmentGraph" ></canvas>
+          <canvas data-financial-overview-target="roiGraph" ></canvas>
+          <canvas data-financial-overview-target="profitGraph" ></canvas>
+          <canvas data-financial-overview-target="performanceGraph" ></canvas>
+        </div>
       </div>
 
       <div class="tab-pane fade" id="pills-energy" role="tabpanel" aria-labelledby="pills-energy-tab" tabindex="0">
