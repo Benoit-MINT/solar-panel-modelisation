@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_28_083352) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_30_082902) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,7 +32,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_28_083352) do
     t.bigint "home_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ratio_months", default: [], array: true
     t.float "production_months", default: [], array: true
     t.float "self_consumption_months", default: [], array: true
     t.float "back_energy_months", default: [], array: true

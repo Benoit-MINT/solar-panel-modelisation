@@ -3,12 +3,11 @@ class PhotovoltaicsController < ApplicationController
 
   def new
     @home = Home.find(params[:home_id])
-    @photovoltaic_project = Photovoltaic.new
-    @power = params[:power]
-    # @photovoltaic_project.photovoltaic_production_pvgis(@home)
-    # @photovoltaic_project.self_consumption_calculation(@home)
-    # @photovoltaic_project.back_energy_calculation
-    # @photovoltaic_project.economics_calculation(@home)
+    @photovoltaic_project = Photovoltaic.new(power: params[:power])
+    @photovoltaic_project.photovoltaic_production_pvgis(@home)
+    @photovoltaic_project.self_consumption_calculation(@home)
+    @photovoltaic_project.back_energy_calculation
+    @photovoltaic_project.economics_calculation(@home)
   end
 
   def show
@@ -20,8 +19,12 @@ class PhotovoltaicsController < ApplicationController
     @home = Home.find(params[:home_id])
     @photovoltaic_new = Photovoltaic.new(photovoltaic_params)
     @photovoltaic_new.home_id = @home.id
+    if params[:photovoltaic][:project].present?
+      @photovoltaic_new.production_months = params[:photovoltaic][:production_months].split(' ').map(&:to_f)
+    else
+      @photovoltaic_new.photovoltaic_production_pvgis(@home)
+    end
 
-    @photovoltaic_new.photovoltaic_production_pvgis(@home)
     @photovoltaic_new.self_consumption_calculation(@home)
     @photovoltaic_new.back_energy_calculation
     @photovoltaic_new.economics_calculation(@home)
@@ -58,7 +61,6 @@ class PhotovoltaicsController < ApplicationController
     @photovoltaic.destroy
     redirect_to home_path(@home), status: :see_other
   end
-
 
   private
 
