@@ -1,12 +1,22 @@
-<div class="container">
-  <p>Nouvelle installation</p>
+<div class="container my-5">
+  <div class="my-4">
+    <strong>Voici l'installation parfaite !</strong>
+    <div class="my-3">
+      <%=@photovoltaic_project.power%>
+      <%=@photovoltaic_project.investment.to_i%>
+      <%=@photovoltaic_project.self_consumption_months.sum.to_i%>
+      <%=(@photovoltaic_project.power / Photovoltaic::POWER_BY_PANEL).ceil %>
+      <%=@photovoltaic_project.sale_electricity_months%>
+      <%=@photovoltaic_project.self_electricity_months%>
+    </div>
 
-  <%= simple_form_for [@home, @photovoltaic_new] do |f| %>
-    <%= f.input :power %>
-    <%# PLus nécessaire avec l'appel API PVGIS %>
-    <%# <% (1..12).each do |ratio| %>
-      <%# <%= f.input "ratio_months[]", input_html: { name: "ratio[ratio_months][#{ratio}]", value: nil }, label: "Ratio month #{ratio}"  %>
-    <%# <% end %>
-    <%= f.submit 'Save', class: 'btn btn-primary' %>
+  <%= simple_form_for [@home, @photovoltaic_project] do |f| %>
+    <%= f.hidden_field :project, value: true %>
+    <%= f.hidden_field :power %>
+    <%# on fait passer ça pour limiter l'appel sur l'API PVGIS %>
+    <%= f.hidden_field :production_months %>
+    <%= f.submit 'Ajouter', class: 'btn btn-secondary' %>
   <% end %>
+
+  </div>
 </div>

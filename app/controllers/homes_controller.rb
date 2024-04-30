@@ -8,6 +8,23 @@ class HomesController < ApplicationController
 
   def show
     @home = Home.find(params[:id])
+    @photovoltaic_new = Photovoltaic.new
+
+    if params[:investment].present?
+      @power = @photovoltaic_new.investment_project(params[:investment][:investment_amount].to_i, params[:investment][:installation_surface].to_i)
+      redirect_to new_home_photovoltaic_path(@home, power: @power)
+    end
+
+    if params[:autonomy].present?
+      @power = @photovoltaic_new.autonomy_project(@home, params[:autonomy][:installation_surface].to_i)
+      redirect_to new_home_photovoltaic_path(@home, power: @power)
+    end
+
+    if params[:bill].present?
+      @power = @photovoltaic_new.bill_project(@home, params[:bill][:reduce_bill].to_i, params[:bill][:installation_surface].to_i)
+      redirect_to new_home_photovoltaic_path(@home, power: @power)
+    end
+
     @photovoltaics = @home.photovoltaics
     @overview_energy_data = overview_energy_data(@photovoltaics)
     @overview_financial_data = overview_financial_data(@photovoltaics)
@@ -101,20 +118,4 @@ class HomesController < ApplicationController
     return [power, investment, roi, profit, performance].transpose.sort_by(&:first).transpose
   end
 
-  # def handle_uploaded_csv(home, file)
-  #   linky_data = []
-  #   CSV.foreach(file, encoding: 'utf-8') do |row|
-  #     linky_data << row
-  #   end
-  #   filtered_data = linky_data.select { |row| row[0]&.start_with?(/^\d/) }
-  #   filtered_data.map! { |row| row[0].split(';').slice(0, 2) }
-  #   filtered_data.select! { |row| row[0].include?("2023") }
-  #   home.home_consumption_months = filtered_data.map { |row| row[1].to_i }.reverse
-  # end
-
-  # def price_consumption_calculation(home)
-  #   (0..11).each do |month|
-  #     home.price_consumption_months[month] = (home.home_consumption_months[month] * home.buy_price_electricity).round(2)
-  #   end
-  # end
 end

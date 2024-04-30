@@ -1,8 +1,1 @@
-<div class="container">
-  <p>Modifier installation</p>
-
-  <%= simple_form_for [@home, @photovoltaic] do |f| %>
-    <%= f.input :power %>
-    <%= f.submit 'Save', class: 'btn btn-primary' %>
-  <% end %>
-</div>
+<%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic %>

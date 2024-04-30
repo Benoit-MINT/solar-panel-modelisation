@@ -12,8 +12,6 @@ export default class extends Controller {
 
     const titles = ['Investissement (€)', 'ROI (années)', 'Bénéfices (€, à 45 ans)', 'Rendement (%, à 45 ans)']
 
-    console.log(financial_data_json)
-
     const labels = []
     for (let i = 0; i < financial_data_json[0].length; i++) {
       labels.push(`${financial_data_json[0][i]} kW/h`);
@@ -30,8 +28,6 @@ export default class extends Controller {
         datasets_data.push(financial_data_json[i+1][j]),
         datasets_color.push(dataColors[j])
       };
-
-      console.log(datasets_data, datasets_color)
 
       var data = {
         labels: labels,
