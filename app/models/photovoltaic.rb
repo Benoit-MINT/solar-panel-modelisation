@@ -23,6 +23,11 @@ class Photovoltaic < ApplicationRecord
     self.economics_calculation(home)
 
     self.save
+    # TODO : issue n° 31
+  end
+
+  def power_calculation
+    self.power = self.panel_number * POWER_BY_PANEL
   end
 
   def photovoltaic_production_pvgis(home)
@@ -75,12 +80,12 @@ class Photovoltaic < ApplicationRecord
   end
 
   def investment_project(investment_amount, installation_surface)
-    power = investment_amount.to_f / PANEL_PRICE
-    surface = power / POWER_BY_PANEL * AREA_BY_PANEL
+    panel_number = (investment_amount / (PANEL_PRICE * POWER_BY_PANEL)).to_i
+    surface = panel_number * AREA_BY_PANEL
     if surface > installation_surface
-      power = installation_surface / AREA_BY_PANEL * POWER_BY_PANEL
+      panel_number = (installation_surface / AREA_BY_PANEL).to_i
     end
-    return power.round(2)
+    return panel_number
   end
 
   def autonomy_project(home, installation_surface)
@@ -99,14 +104,14 @@ class Photovoltaic < ApplicationRecord
 
       if project_self_energy[i] == project_self_energy[i - 1]
         # return car on est à l'optimal max : i - 1 est le bon
-        return project_power - POWER_BY_PANEL
+        return panel_number = i - 1
       end
 
       project_power += POWER_BY_PANEL
       project_surface += AREA_BY_PANEL
     end
     # return le cas où c'est la surface le limitant
-    return project_power - POWER_BY_PANEL
+    return panel_number = i
   end
 
   def bill_project(home, reduce_bill, installation_surface)
@@ -127,14 +132,14 @@ class Photovoltaic < ApplicationRecord
 
       if project_bill[i] > reduce_bill
         # return car on est à l'objectif de réduction
-        return project_power
+        return panel_number = i
       end
 
       project_power += POWER_BY_PANEL
       project_surface += AREA_BY_PANEL
     end
     # return le cas où c'est la surface le limitant
-    return project_power - POWER_BY_PANEL
+    return panel_number = i
   end
 
 end

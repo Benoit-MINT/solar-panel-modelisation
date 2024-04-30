@@ -1,6 +1,7 @@
 <div class="container">
   <%= simple_form_for [home, photovoltaic] do |f| %>
-    <%= f.input :power %>
+    <%= f.input :panel_number, label: "Nombre de panneaux" %>
     <%= f.submit 'Ajouter', class: 'btn btn-secondary' %>
   <% end %>
+  <%# TODO : faire du JS pour calculer la surface %>
 </div>

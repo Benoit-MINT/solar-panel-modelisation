@@ -5,14 +5,14 @@
       <%=@photovoltaic_project.power%>
       <%=@photovoltaic_project.investment.to_i%>
       <%=@photovoltaic_project.self_consumption_months.sum.to_i%>
-      <%=(@photovoltaic_project.power / Photovoltaic::POWER_BY_PANEL).ceil %>
+      <%=@photovoltaic_project.panel_number %>
       <%=@photovoltaic_project.sale_electricity_months%>
       <%=@photovoltaic_project.self_electricity_months%>
     </div>
 
   <%= simple_form_for [@home, @photovoltaic_project] do |f| %>
-    <%= f.hidden_field :project, value: true %>
-    <%= f.hidden_field :power %>
+    <%= f.hidden_field :project_type, value: @project_type %>
+    <%= f.hidden_field :panel_number %>
     <%# on fait passer ça pour limiter l'appel sur l'API PVGIS %>
     <%= f.hidden_field :production_months %>
     <%= f.submit 'Ajouter', class: 'btn btn-secondary' %>

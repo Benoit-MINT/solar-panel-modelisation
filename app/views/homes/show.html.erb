@@ -78,13 +78,13 @@
 
     <h4 class="mt-5">Scénarios d'installation :</h4>
     <div class="my-3">
-      <strong>Simuler une puissance</strong>
+      <strong>Ajouter une installation</strong>
       <%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic_new %>
     </div>
     <%@photovoltaics.each do |photovoltaic|%>
 
         <div class="mt-4">
-          <%= link_to "Scénario à #{photovoltaic.power}", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-primary' %>
+          <h5>Nom: <%=photovoltaic.name%></h5>
         </div>
 
         <div>
@@ -105,14 +105,15 @@
 
         <div>
           <strong>Caractéristiques de l'installation</strong>
-          <% nb_solar_panel = (photovoltaic.power / Photovoltaic::POWER_BY_PANEL).ceil %>
-          <p>Nombre de panneaux solaires : <%= nb_solar_panel %> </p>
-          <p>Surface utile : <%= (nb_solar_panel * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
+          <p>Puissance crète : <%= photovoltaic.power %> </p>
+          <p>Nombre de panneaux solaires : <%= photovoltaic.panel_number %> </p>
+          <p>Surface utile : <%= (photovoltaic.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
         </div>
 
         <div>
+          <%= link_to "Voir", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-primary' %>
           <%= link_to "Supprimer", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
-          <%= link_to "Modifier puissance", edit_home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary' %>
+          <%= link_to "Modifier le nombre de panneaux", edit_home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary' %>
         </div>
     <%end%>
   </div>
