@@ -26,10 +26,6 @@
   <div class="container my-5" id="scenarios">
 
     <div class="my-3">     <%# des boutons puis modale %>
-      <div class="my-3">
-        <strong>Simuler une puissance</strong>
-        <%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic_new %>
-      </div>
 
       <div class="my-3">
         <strong>Quel est votre projet ?</strong>
@@ -50,19 +46,28 @@
           <%# contenu :%>
           <div class="tab-content" id="project-tabContent">
             <div class="tab-pane fade show active" id="project-investment" role="tabpanel" aria-labelledby="project-investment-tab" tabindex="0">
-              <p>hello onglet investir dans le solaire</p>
-              <%# <%= simple_form do |f| %>
-                <%# <%= f.input :power %>
-                <%# <%= f.submit 'Proposez moi l\'installation parfaite!', class: 'btn btn-secondary' %>
-              <%# <% end %>
+            <%# formulaire %>
+              <%= simple_form_for :investment, method: :get do |f| %>
+                <%= f.input :investment_amount, label: "Budget d'investissement" %>
+                <%= f.input :installation_surface, label: "Surface disponible" %>
+                <%= f.submit "Search", class: 'btn btn-secondary' %>
+              <% end %>
             </div>
 
             <div class="tab-pane fade" id="project-autonomy" role="tabpanel" aria-labelledby="project-autonomy-tab" tabindex="0">
-              <p>hello onglet gagner en autonomie</p>
+              <%# formulaire %>
+              <%= simple_form_for :autonomy, method: :get do |f| %>
+                <%= f.input :installation_surface, label: "Surface de votre toit" %>
+                <%= f.submit "Search", class: 'btn btn-secondary' %>
+              <% end %>
             </div>
 
             <div class="tab-pane fade" id="project-bill" role="tabpanel" aria-labelledby="project-bill-tab" tabindex="0">
-              <p>hello onglet diminuer la facture élec</p>
+              <%# formulaire %>
+              <%= simple_form_for :bill, method: :get do |f| %>
+                <%= f.input :reduce_bill, label: "Diminution souhaitée par mois" %>
+                <%= f.submit "Search", class: 'btn btn-secondary' %>
+              <% end %>
             </div>
           </div>
 
@@ -71,6 +76,10 @@
     </div>
 
     <h4 class="mt-5">Scénarios d'installation :</h4>
+    <div class="my-3">
+      <strong>Simuler une puissance</strong>
+      <%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic_new %>
+    </div>
     <%@photovoltaics.each do |photovoltaic|%>
 
         <div class="mt-4">

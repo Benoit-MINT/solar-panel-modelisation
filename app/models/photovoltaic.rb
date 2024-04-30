@@ -4,6 +4,8 @@ class Photovoltaic < ApplicationRecord
   POWER_BY_PANEL = 0.43
   # en m2 par panneau :
   AREA_BY_PANEL = 1.85
+  # prix du panneau par kWc :
+  PANEL_PRICE = 3500
 
   belongs_to :home
 
@@ -63,12 +65,33 @@ class Photovoltaic < ApplicationRecord
       self.self_electricity_months[month] = (self.self_consumption_months[month] * home.buy_price_electricity).round(2)
       self.sale_electricity_months[month] = (self.back_energy_months[month] * home.sale_price_electricity).round(2)
     end
-    # hypothèse : calcul de l'investissement = power(kWc) * 3500 -> produit + installation
-    self.investment = (self.power * 3500).to_i
+    # hypothèse 3 : calcul de l'investissement = power(kWc) * 3500 -> produit + installation
+    self.investment = (self.power * PANEL_PRICE).to_i
     self.roi = (self.investment / (self.self_electricity_months.sum + self.sale_electricity_months.sum)).round(1)
-    # hypothèse : calcul du profit final sur une base de durée de vie de panneau de 45 ans
+    # hypothèse 4 : calcul du profit final sur une base de durée de vie de panneau de 45 ans
     self.profit = (((self.self_electricity_months.sum + self.sale_electricity_months.sum) * 45) - self.investment).to_i
     self.annual_performance = ((self.self_electricity_months.sum + self.sale_electricity_months.sum) / self.investment * 100).round(2)
     self.global_performance = (((self.investment + self.profit) - self.investment) / self.investment * 100).round(2)
   end
+
+  def investment_project(investment_amount, installation_surface)
+    power = investment_amount.to_f / PANEL_PRICE
+    surface = power / POWER_BY_PANEL * AREA_BY_PANEL
+    if surface > installation_surface
+      power = installation_surface / AREA_BY_PANEL * POWER_BY_PANEL
+    end
+    return power.round(2)
+  end
+
+  def autonomy_project(home, surface)
+    # voir hypothèse 2
+    # TODO : faire l'algo en utilisant la méthode photovoltaic_production_pvgis(home)
+    return power = 3.95
+  end
+
+  def bill_project(home, reduce_bill)
+    # TODO : faire l'algo
+    return power = 12.45
+  end
+
 end

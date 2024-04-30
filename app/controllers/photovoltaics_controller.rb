@@ -3,7 +3,12 @@ class PhotovoltaicsController < ApplicationController
 
   def new
     @home = Home.find(params[:home_id])
-    @photovoltaic_new = Photovoltaic.new
+    @photovoltaic_project = Photovoltaic.new
+    @power = params[:power]
+    # @photovoltaic_project.photovoltaic_production_pvgis(@home)
+    # @photovoltaic_project.self_consumption_calculation(@home)
+    # @photovoltaic_project.back_energy_calculation
+    # @photovoltaic_project.economics_calculation(@home)
   end
 
   def show
