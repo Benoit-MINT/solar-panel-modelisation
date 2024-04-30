@@ -62,7 +62,6 @@ class PhotovoltaicsController < ApplicationController
 
     @photovoltaic.save
     redirect_to home_path(@home), alert: "Nouvelle installation de #{@photovoltaic.panel_number}€"
-    # TODO : ne pas permettre l'update pour des scénarios proposés
   end
 
   def destroy
