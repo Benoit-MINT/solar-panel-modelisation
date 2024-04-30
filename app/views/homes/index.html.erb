@@ -1,16 +1,26 @@
-<div class="container">
-  <h2>Liste des projets</h2>
-
-  <%= link_to "Nouveau projet", new_home_path, class: 'btn btn-primary' %>
-
-  <div class="mt-3">
-    <strong>Liste de tous les projets ici:</strong>
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://www.panneausolaire-info.fr/wp-content/uploads/installation-panneau-solaire.jpg);">
+  <div class="container">
+    <h1>SolaireSimplifié apporte une lumière objective sur vos projets solaires!</h1>
+    <p>Découvrez votre potentiel solaire avec notre simulateur intuitif : visualisez, planifiez et optimisez votre installation photovoltaïque pour une transition énergétique en toute confiance. </p>
+    <%= link_to "Nouveau projet", new_home_path, class: 'btn btn-flat' %>
   </div>
+</div>
+
+<div class="container my-3">
   <%@homes.each do |home|%>
-  <div class="mt-3">
-    <%= home.name%>
-    <%= link_to "Voir", home_path(home), class: 'btn btn-secondary' %>
-    <%= link_to "Supprimer", home_path(home), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer ce projet?"} %>
-  </div>
+
+      <div class="home-project">
+        <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSCa3TdUDZlpBwHfr4LL61FNqJarONllxncFYxCyE8Nw&s'/>
+        <div class="home-project-content">
+          <p><small><%= home.name%></small></p>
+          <p><strong><%=home.photovoltaics.count%></strong> projets d'installation</p>
+        </div>
+        <div class="home-project-actions">
+          <%= link_to "Voir", home_path(home), class: 'btn btn-ghost' %>
+          <%= link_to "Modifier", edit_home_path(home), class: 'btn btn-ghost' %>
+          <%= link_to "Supprimer", home_path(home), class: 'btn btn-ghost', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer ce projet?"} %>
+        </div>
+      </div>
+
   <%end%>
 </div>

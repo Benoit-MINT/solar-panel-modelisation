@@ -1,0 +1,73 @@
+
+.banner {
+  background-size: cover;
+  background-position: center;
+  padding: 150px 0;
+}
+
+.banner h1 {
+  font-family: 'Raleway', sans-serif;
+  margin: 0;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.banner p {
+  font-size: 20px;
+  color: white;
+  opacity: .7;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+// liste des projets :
+.home-project {
+  display: flex;
+  align-items: center;
+  height: 120px;
+  margin-bottom: 8px;
+  background: white;
+  padding: 8px 16px;
+  border: 1px solid rgb(235,235,235);
+  border-radius: 5px;
+}
+
+.home-project:hover {
+  box-shadow: rgba(0,0,0,0.15) 0 2px 2px;
+}
+
+.home-project img {
+  height: 100%;
+  width: 120px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.home-project .home-project-content {
+  flex-grow: 1;
+  padding: 0 24px;
+}
+
+.home-project p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.home-project small {
+  color: #999999;
+  font-weight: bold;
+}
+.home-project .home-project-actions {
+  opacity: 0;
+  display: flex;
+  transition: ease .3s;
+}
+
+.home-project:hover .home-project-actions {
+  opacity: 1;
+}
+
+.home-project .home-project-actions a {
+  margin-left: 8px;
+}
