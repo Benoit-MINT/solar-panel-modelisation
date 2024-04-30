@@ -11,18 +11,18 @@ class HomesController < ApplicationController
     @photovoltaic_new = Photovoltaic.new
 
     if params[:investment].present?
-      @power = @photovoltaic_new.investment_project(params[:investment][:investment_amount].to_i, params[:investment][:installation_surface].to_i)
-      redirect_to new_home_photovoltaic_path(@home, power: @power)
+      @panel_number = @photovoltaic_new.investment_project(params[:investment][:investment_amount].to_i, params[:investment][:installation_surface].to_i)
+      redirect_to new_home_photovoltaic_path(@home, panel_number: @panel_number, project_type: 0)
     end
 
     if params[:autonomy].present?
-      @power = @photovoltaic_new.autonomy_project(@home, params[:autonomy][:installation_surface].to_i)
-      redirect_to new_home_photovoltaic_path(@home, power: @power)
+      @panel_number = @photovoltaic_new.autonomy_project(@home, params[:autonomy][:installation_surface].to_i)
+      redirect_to new_home_photovoltaic_path(@home, panel_number: @panel_number, project_type: 1)
     end
 
     if params[:bill].present?
-      @power = @photovoltaic_new.bill_project(@home, params[:bill][:reduce_bill].to_i, params[:bill][:installation_surface].to_i)
-      redirect_to new_home_photovoltaic_path(@home, power: @power)
+      @panel_number = @photovoltaic_new.bill_project(@home, params[:bill][:reduce_bill].to_i, params[:bill][:installation_surface].to_i)
+      redirect_to new_home_photovoltaic_path(@home, panel_number: @panel_number, project_type: 2)
     end
 
     @photovoltaics = @home.photovoltaics
