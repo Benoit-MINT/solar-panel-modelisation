@@ -65,6 +65,7 @@
             <div class="tab-pane fade" id="project-bill" role="tabpanel" aria-labelledby="project-bill-tab" tabindex="0">
               <%# formulaire %>
               <%= simple_form_for :bill, method: :get do |f| %>
+                <%= f.input :installation_surface, label: "Surface de votre toit" %>
                 <%= f.input :reduce_bill, label: "Diminution souhaitée par mois" %>
                 <%= f.submit "Search", class: 'btn btn-secondary' %>
               <% end %>

@@ -21,7 +21,7 @@ class HomesController < ApplicationController
     end
 
     if params[:bill].present?
-      @power = @photovoltaic_new.bill_project(@home, params[:bill][:reduce_bill].to_i)
+      @power = @photovoltaic_new.bill_project(@home, params[:bill][:reduce_bill].to_i, params[:bill][:installation_surface].to_i)
       redirect_to new_home_photovoltaic_path(@home, power: @power)
     end
 

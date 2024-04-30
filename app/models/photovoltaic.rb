@@ -40,7 +40,7 @@ class Photovoltaic < ApplicationRecord
     # hypothèse 1 : consommation instantanée socle du bien est constante et égale à = (consommation mensuelle * 12/365) / 24
     instant_power_consumption = []
     (0..11).each do |month|
-      instant_power_consumption[month] = (home.home_consumption_months[month] * 100 * 12 / 365 / 24)/100.to_f
+      instant_power_consumption[month] = (home.home_consumption_months[month] * 100 * 12 / 365 / 24) / 100.to_f
     end
     # hypothèse 2 : courbe de production est de type créneau
     (0..11).each do |month|
@@ -83,15 +83,58 @@ class Photovoltaic < ApplicationRecord
     return power.round(2)
   end
 
-  def autonomy_project(home, surface)
+  def autonomy_project(home, installation_surface)
     # voir hypothèse 2
-    # TODO : faire l'algo en utilisant la méthode photovoltaic_production_pvgis(home)
-    return power = 3.95
+    # il faut trouver le maximum de photovoltaic.self_consumption_months.sum
+    project_power = POWER_BY_PANEL
+    project_surface = AREA_BY_PANEL
+    project_self_energy = [0]
+    i = 0
+    while project_surface < installation_surface
+      i += 1
+      self.power = project_power
+      self.photovoltaic_production_pvgis(home)
+      self.self_consumption_calculation(home)
+      project_self_energy << self.self_consumption_months.sum.to_i
+
+      if project_self_energy[i] == project_self_energy[i - 1]
+        # return car on est à l'optimal max : i - 1 est le bon
+        return project_power - POWER_BY_PANEL
+      end
+
+      project_power += POWER_BY_PANEL
+      project_surface += AREA_BY_PANEL
+    end
+    # return le cas où c'est la surface le limitant
+    return project_power - POWER_BY_PANEL
   end
 
-  def bill_project(home, reduce_bill)
-    # TODO : faire l'algo
-    return power = 12.45
+  def bill_project(home, reduce_bill, installation_surface)
+    # on va raisonner sur l'année, on doit avoir (self_electricity_months.sum + sale_electricity_months.sum) au moins égal à (reduce_bill * 12)
+    reduce_bill *= 12
+    project_power = POWER_BY_PANEL
+    project_surface = AREA_BY_PANEL
+    project_bill = [0]
+    i = 0
+    while project_surface < installation_surface
+      i += 1
+      self.power = project_power
+      self.photovoltaic_production_pvgis(home)
+      self.self_consumption_calculation(home)
+      self.back_energy_calculation
+      self.economics_calculation(home)
+      project_bill << (self.self_electricity_months.sum + self.sale_electricity_months.sum).to_i
+
+      if project_bill[i] > reduce_bill
+        # return car on est à l'objectif de réduction
+        return project_power
+      end
+
+      project_power += POWER_BY_PANEL
+      project_surface += AREA_BY_PANEL
+    end
+    # return le cas où c'est la surface le limitant
+    return project_power - POWER_BY_PANEL
   end
 
 end
