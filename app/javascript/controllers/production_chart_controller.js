@@ -26,22 +26,22 @@ export default class extends Controller {
       labels: labels,
       datasets: [{
           label: 'Autoconsommation',
-          backgroundColor: 'green',
+          backgroundColor: 'rgba(75, 192, 192, 1)',
           stack: 'Stack 0',
           data: self_consumption_data_json
       }, {
           label: 'Consommation sur le réseau',
-          backgroundColor: 'blue',
+          backgroundColor: 'rgba(255, 159, 64, 1)',
           stack: 'Stack 0',
           data: consumption_network_data_json
       }, {
           label: 'Production autoconsommée',
-          backgroundColor: 'green',
+          backgroundColor: 'rgba(75, 192, 192, 1)',
           stack: 'Stack 1',
           data: self_consumption_data_json
       }, {
           label: 'Renvoi sur le réseau',
-          backgroundColor: 'yellow',
+          backgroundColor: 'rgba(153, 102, 255, 1)',
           stack: 'Stack 1',
           data: back_energy_data_json
       }]

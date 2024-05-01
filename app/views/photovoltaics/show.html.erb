@@ -1,26 +1,44 @@
 <div class="container p-4">
-  <h3>Scénario à <%= @photovoltaic.power %> kW/h </h3>
-  <%= link_to "Retour", home_path(@home), class: 'btn btn-secondary' %>
-
-  <div class="p-5">
-    <strong>Bilan énergétique :</strong>
-    <canvas data-controller="production-chart">
-      <div data-production-chart-target="homeConsumption" data-value = "<%= @home.home_consumption_months %>"> </div>
-      <div data-production-chart-target="solarProduction" data-value = "<%= @photovoltaic.production_months %>"> </div>
-      <div data-production-chart-target="selfConsumption" data-value = "<%= @photovoltaic.self_consumption_months %>"> </div>
-      <div data-production-chart-target="backEnergy" data-value = "<%= @photovoltaic.back_energy_months %>"> </div>
-    </canvas>
-  </div>
-
-  <div class="px-5">
-    <strong>Bilan financier :</strong>
-    <div>
-      <canvas data-controller="financial-chart">
-        <div data-financial-chart-target="priceConsumption" data-value = "<%= @home.price_consumption_months %>"> </div>
-        <div data-financial-chart-target="saleElectricity" data-value = "<%= @photovoltaic.sale_electricity_months %>"> </div>
-        <div data-financial-chart-target="selfElectricity" data-value = "<%= @photovoltaic.self_electricity_months %>"> </div>
-      </canvas>
+  <div class="row align-items-center">
+    <div class="col">
+      <%= link_to "Retour", home_path(@home), class: 'btn btn-ghost' %>
+    </div>
+    <div class="col text-end">
+      <h3><%= @photovoltaic.name %></h3>
     </div>
   </div>
+
+  <div class="row bloc my-4">
+    <%# onglets :%>
+    <ul class="nav nav-pills nav-justified mb-4" id="photovoltaic-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="photovoltaic-financial-tab" data-bs-toggle="pill" data-bs-target="#photovoltaic-financial" type="button" role="tab" aria-controls="photovoltaic-financial" aria-selected="true">Bilan financier</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="photovoltaic-energy-tab" data-bs-toggle="pill" data-bs-target="#photovoltaic-energy" type="button" role="tab" aria-controls="photovoltaic-energy" aria-selected="false">Bilan énergétique</button>
+      </li>
+    </ul>
+
+    <%# contenu :%>
+    <div class="tab-content" id="photovoltaic-tabContent">
+      <div class="tab-pane fade show active" id="photovoltaic-financial" role="tabpanel" aria-labelledby="photovoltaic-financial-tab" tabindex="0">
+        <canvas data-controller="financial-chart">
+          <div data-financial-chart-target="priceConsumption" data-value = "<%= @home.price_consumption_months %>"> </div>
+          <div data-financial-chart-target="saleElectricity" data-value = "<%= @photovoltaic.sale_electricity_months %>"> </div>
+          <div data-financial-chart-target="selfElectricity" data-value = "<%= @photovoltaic.self_electricity_months %>"> </div>
+        </canvas>
+      </div>
+
+      <div class="tab-pane fade" id="photovoltaic-energy" role="tabpanel" aria-labelledby="photovoltaic-energy-tab" tabindex="0">
+        <canvas data-controller="production-chart">
+          <div data-production-chart-target="homeConsumption" data-value = "<%= @home.home_consumption_months %>"> </div>
+          <div data-production-chart-target="solarProduction" data-value = "<%= @photovoltaic.production_months %>"> </div>
+          <div data-production-chart-target="selfConsumption" data-value = "<%= @photovoltaic.self_consumption_months %>"> </div>
+          <div data-production-chart-target="backEnergy" data-value = "<%= @photovoltaic.back_energy_months %>"> </div>
+        </canvas>
+      </div>
+    </div>
+  </div>
+
 
 </div>
