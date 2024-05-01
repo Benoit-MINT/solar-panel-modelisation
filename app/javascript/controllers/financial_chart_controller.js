@@ -36,28 +36,26 @@ export default class extends Controller {
       }
     }
 
-    console.log(self_electricity_array, sale_electricity_array)
-
     const data_test = {
       labels: labels,
       datasets: [{
           label: 'Prix initial',
-          backgroundColor: 'blue',
+          backgroundColor: 'rgba(54, 162, 235, 1)',
           stack: 'Stack 0',
           data: price_consumption_data_json
       }, {
           label: 'Autoconsommation',
-          backgroundColor: 'red',
+          backgroundColor: 'rgba(255, 159, 64, 1)',
           stack: 'Stack 1',
           data: self_electricity_array
       }, {
           label: 'Revente',
-          backgroundColor: 'yellow',
+          backgroundColor: 'rgba(255, 205, 86, 1)',
           stack: 'Stack 1',
           data: sale_electricity_array
       }, {
         label: 'Prix final',
-        backgroundColor: 'green',
+        backgroundColor: 'rgba(75, 192, 192, 1)',
         stack: 'Stack 2',
         data: final_price_data_json
       }]
