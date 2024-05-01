@@ -1,0 +1,21 @@
+.form-homes {
+  background-color: white;
+  border: 1px solid rgb(235,235,235);
+  border-radius: 5px;
+  box-shadow: rgba(0,0,0,0.15) 0 2px 2px;
+}
+
+.form-homes h2 {
+  color: #636363;
+  font-family: 'Raleway', sans-serif;
+}
+
+#cards-consumption {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 16px;
+}
+
+#map {
+  border-radius: 3px;
+}
