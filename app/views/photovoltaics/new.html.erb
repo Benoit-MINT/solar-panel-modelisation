@@ -1,22 +1,54 @@
-<div class="container my-5">
-  <div class="my-4">
-    <strong>Voici l'installation parfaite !</strong>
-    <div class="my-3">
-      <%=@photovoltaic_project.power%>
-      <%=@photovoltaic_project.investment.to_i%>
-      <%=@photovoltaic_project.self_consumption_months.sum.to_i%>
-      <%=@photovoltaic_project.panel_number %>
-      <%=@photovoltaic_project.sale_electricity_months%>
-      <%=@photovoltaic_project.self_electricity_months%>
+<div class="container p-4">
+  <div class="row">
+    <%= link_to "Retour", home_path(@home), class: 'btn btn-ghost' %>
+    <div class="text-center">
+      <h2>Voici l'installation parfaite !</h2>
+      <strong><%= @photovoltaic_project.panel_number %> panneaux solaires</strong>
+      <p>Surface totals : <%=(@photovoltaic_project.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
     </div>
-
-  <%= simple_form_for [@home, @photovoltaic_project] do |f| %>
-    <%= f.hidden_field :project_type, value: @project_type %>
-    <%= f.hidden_field :panel_number %>
-    <%# on fait passer ça pour limiter l'appel sur l'API PVGIS %>
-    <%= f.hidden_field :production_months %>
-    <%= f.submit 'Ajouter', class: 'btn btn-secondary' %>
-  <% end %>
-
   </div>
+
+  <%# affichage des images de panneaux (4 par lignes max, 12 max au total) %>
+  <%i=1%>
+  <%panel = @photovoltaic_project.panel_number%>
+  <%while panel > 0 && i <= 4 do %>
+    <div class="row mt-3">
+      <div class="col-8 mx-auto d-flex justify-content-around">
+        <%[panel, 4].min.times do%>
+          <%= image_tag "solar_pannel.png", alt: "Solar panel", class: "solar-panel-img" %>
+          <%panel -= 1%>
+        <%end%>
+        <%i += 1%>
+      </div>
+    </div>
+  <%end%>
+
+  <div class="row mt-5 d-flex justify-content-around">
+    <div class="col-5 p-3 bloc">
+      <strong>Caractéristiques financières</strong>
+      <p>Investissment : <%=@photovoltaic_project.investment.to_i%> €</p>
+      <p>Economie annuelle sur autoconsommation : <%=@photovoltaic_project.self_electricity_months.sum.to_i%> €</p>
+      <p>Revente annuelle de production : <%=@photovoltaic_project.sale_electricity_months.sum.to_i%> €</p>
+      <p>Rentabilité annuelle : <%=@photovoltaic_project.annual_performance%> %</p>
+    </div>
+    <div class="col-5 p-3 bloc">
+      <strong>Caractéristiques énergétiques</strong>
+      <p>Puissance de l'installation : <%=@photovoltaic_project.power%> kWc</p>
+      <p>Energie annuelle produite : <%=@photovoltaic_project.production_months.sum.to_i%> kW/h</p>
+      <p>Energie annuelle autoconsommée : <%=@photovoltaic_project.self_consumption_months.sum.to_i%> kW/h</p>
+      <p>Energie annuelle renvoyée : <%=@photovoltaic_project.back_energy_months.sum.to_i%> kW/h</p>
+    </div>
+  </div>
+
+  <div class="row my-5 text-center">
+    <%= simple_form_for [@home, @photovoltaic_project] do |f| %>
+      <%= f.hidden_field :project_type, value: @project_type %>
+      <%= f.hidden_field :panel_number %>
+      <%# on fait passer ça pour limiter l'appel sur l'API PVGIS %>
+      <%= f.hidden_field :production_months %>
+      <%= f.submit 'Ajouter', class: 'btn btn-flat' %>
+    <% end %>
+  </div>
+
+
 </div>
