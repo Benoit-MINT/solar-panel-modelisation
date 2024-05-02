@@ -12,16 +12,40 @@
 @import "pages/index";
 
 body {
-  font-family: "Work Sans", "Helvetica", "sans-serif";
+  font-family: "Archivo", "Helvetica", "sans-serif";
+  color: #636363;
   background-color: white;
+}
+
+h4 {
+  color: #636363;
+  font-family: "Nunito", "Helvetica", "sans-serif";
+}
+
+h5 {
+  color: #636363;
+  font-family: "Nunito", "Helvetica", "sans-serif";
 }
 
 h3 {
   color: #636363;
-  font-family: "Archivo", "Helvetica", "sans-serif"
+  font-family: "Nunito", "Helvetica", "sans-serif";
 }
 
 h2 {
   color: #636363;
-  font-family: "Archivo", "Helvetica", "sans-serif"
+  font-family: "Nunito", "Helvetica", "sans-serif";
+}
+
+p {
+  margin: 0;
+  line-height: 1.4;
+  color: #636363;
+  font-family: "Archivo", "Helvetica", "sans-serif";
+}
+
+small {
+  color: #999999;
+  font-weight: bold;
+  font-family: "Archivo", "Helvetica", "sans-serif";
 }

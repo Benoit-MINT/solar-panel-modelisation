@@ -18,7 +18,7 @@ export default class extends Controller {
           label: 'Consommation mensuelle (kW/h)',
           data: consumption_data_json,
           backgroundColor: [
-          'rgb(54, 162, 235)',
+            'rgb(232, 223, 202)',
           ],
           hoverOffset: 4
         }]
