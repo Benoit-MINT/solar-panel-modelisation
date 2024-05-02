@@ -44,11 +44,6 @@ class PhotovoltaicsController < ApplicationController
     end
   end
 
-  def edit
-    @home = Home.find(params[:home_id])
-    @photovoltaic = Photovoltaic.find(params[:id])
-  end
-
   def update
     @home = Home.find(params[:home_id])
     @photovoltaic = Photovoltaic.find(params[:id])

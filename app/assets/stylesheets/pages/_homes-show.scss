@@ -1,0 +1,75 @@
+.modal-content {
+  border-radius: 3px;
+}
+
+#cards-photovoltaics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 24px;
+}
+
+.card-photovoltaic {
+  border: 1px solid rgb(235,235,235);
+  border-radius: 10px;
+}
+
+.card-photovoltaic:hover {
+  box-shadow: rgba(0,0,0,0.15) 0 2px 2px;
+}
+
+.card-photovoltaic a {
+  text-decoration: none;
+  color: initial;
+}
+
+.card-photovoltaic-title {
+  background-color: #B5C18E;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.photovoltaic-title {
+  height: 100px;
+}
+
+// .photovoltaic-title button {
+//   text-decoration: none;
+//   color: initial;
+// }
+
+.card-photovoltaic-title h5 {
+  margin: 0;
+  color: white;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.card-photovoltaic-title i {
+  color: white;
+  font-size: 25px;
+}
+
+.card-photovoltaic-title i:hover {
+  color: #E8DFCA;
+}
+
+.carousel-photovoltaic {
+  height: 300px;
+}
+
+.carousel-inner {
+  height: 100%;
+}
+
+.carousel-item {
+  height: 100%;
+}
+
+#overview-tab .nav-link {
+  color: #1A4D2E;
+}
+
+#overview-tab .nav-link.active {
+  color: white;
+  background-color: #4F6F52;
+}

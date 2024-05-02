@@ -4,7 +4,7 @@
     <div class="text-center">
       <h2>Voici l'installation parfaite !</h2>
       <strong><%= @photovoltaic_project.panel_number %> panneaux solaires</strong>
-      <p>Surface totals : <%=(@photovoltaic_project.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
+      <p>pour un total de <%=(@photovoltaic_project.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
     </div>
   </div>
 
@@ -25,18 +25,32 @@
 
   <div class="row mt-5 d-flex justify-content-around">
     <div class="col-5 p-3 bloc">
-      <strong>Caractéristiques financières</strong>
-      <p>Investissment : <%=@photovoltaic_project.investment.to_i%> €</p>
-      <p>Economie annuelle sur autoconsommation : <%=@photovoltaic_project.self_electricity_months.sum.to_i%> €</p>
-      <p>Revente annuelle de production : <%=@photovoltaic_project.sale_electricity_months.sum.to_i%> €</p>
-      <p>Rentabilité annuelle : <%=@photovoltaic_project.annual_performance%> %</p>
+      <div class="text-center">
+        <strong>Caractéristiques financières</strong>
+      </div>
+      <hr class="my-2">
+      <small>Investissement</small>
+      <p><%=@photovoltaic_project.investment.to_i%> €</p>
+      <small>Economie annuelle de l'autoconsommation</small>
+      <p><%=@photovoltaic_project.self_electricity_months.sum.to_i%> €</p>
+      <small>Revente annuelle de production</small>
+      <p><%=@photovoltaic_project.sale_electricity_months.sum.to_i%> €</p>
+      <small>Rentabilité annuelle</small>
+      <p><%=@photovoltaic_project.annual_performance%> %</p>
     </div>
     <div class="col-5 p-3 bloc">
-      <strong>Caractéristiques énergétiques</strong>
-      <p>Puissance de l'installation : <%=@photovoltaic_project.power%> kWc</p>
-      <p>Energie annuelle produite : <%=@photovoltaic_project.production_months.sum.to_i%> kW/h</p>
-      <p>Energie annuelle autoconsommée : <%=@photovoltaic_project.self_consumption_months.sum.to_i%> kW/h</p>
-      <p>Energie annuelle renvoyée : <%=@photovoltaic_project.back_energy_months.sum.to_i%> kW/h</p>
+      <div class="text-center">
+        <strong>Caractéristiques énergétiques</strong>
+      </div>
+      <hr class="my-2">
+      <small>Puissance de l'installation</small>
+      <p><%=@photovoltaic_project.power%> kWc</p>
+      <small>Energie annuelle produite</small>
+      <p><%=@photovoltaic_project.production_months.sum.to_i%> kW/h</p>
+      <small>Energie annuelle autoconsommée</small>
+      <p><%=@photovoltaic_project.self_consumption_months.sum.to_i%> kW/h</p>
+      <small>Energie annuelle renvoyée sur le réseau</small>
+      <p><%=@photovoltaic_project.back_energy_months.sum.to_i%> kW/h</p>
     </div>
   </div>
 

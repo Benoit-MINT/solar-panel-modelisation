@@ -1,129 +1,168 @@
-<div class="container my-5">
-  <%= link_to "Retour", homes_path, class: 'btn btn-secondary' %>
-
-
-
-  <div class="container my-5" id="home-presentation">
-    <h2>Projet : <%=@home.name%></h2>
-    <p>Localisation : <%=@home.address%></p>
-
-    <div id="map" data-controller="map-home">
-      <div data-map-home-target="lat" data-value = "<%= @home.latitude %>"> </div>
-      <div data-map-home-target="long" data-value = "<%= @home.longitude %>"> </div>
+<div class="container p-4">
+  <div class="row align-items-center">
+    <div class="col">
+      <%= link_to "Retour", homes_path, class: 'btn btn-ghost' %>
     </div>
-
-    <p>Consommation annuel (kW/h) : <%= @home.home_consumption_months.sum.to_i%></p>
-    <p>Budget électrique annuel : <%= @home.price_consumption_months.sum.to_i%> €</p>
-    <canvas data-controller="consumption-chart">
-      <div data-consumption-chart-target="consumptionHome" data-value = "<%= @home.home_consumption_months %>"> </div>
-    </canvas>
-
-    <%= link_to "Modifier projet", edit_home_path(@home), class: 'btn btn-primary' %>
+    <div class="col text-end">
+      <h3><%= @home.name %></h3>
+    </div>
   </div>
 
-
-
-  <div class="container my-5" id="scenarios">
-
-    <div class="my-3">     <%# des boutons puis modale %>
-
-      <div class="my-3">
-        <strong>Quel est votre projet ?</strong>
-        <div>
-          <%# <%= link_to "Nouveau projet", new_home_photovoltaic_path(@home, @photovoltaic_new), class: 'btn btn-success' %>
-          <%# onglets :%>
-          <ul class="nav nav-pills nav-justified mb-3" id="project-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="project-investment-tab" data-bs-toggle="pill" data-bs-target="#project-investment" type="button" role="tab" aria-controls="project-investment" aria-selected="true">Investir dans la solaire</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="project-autonomy-tab" data-bs-toggle="pill" data-bs-target="#project-autonomy" type="button" role="tab" aria-controls="project-autonomy" aria-selected="false">Gagner en autonomie</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="project-bill-tab" data-bs-toggle="pill" data-bs-target="#project-bill" type="button" role="tab" aria-controls="project-bill" aria-selected="false">Diminuer ma facture électrique</button>
-            </li>
-          </ul>
-          <%# contenu :%>
-          <div class="tab-content" id="project-tabContent">
-            <div class="tab-pane fade show active" id="project-investment" role="tabpanel" aria-labelledby="project-investment-tab" tabindex="0">
-            <%# formulaire %>
-              <%= simple_form_for :investment, method: :get do |f| %>
-                <%= f.input :investment_amount, label: "Budget d'investissement" %>
-                <%= f.input :installation_surface, label: "Surface disponible" %>
-                <%= f.submit "Search", class: 'btn btn-secondary' %>
-              <% end %>
-            </div>
-
-            <div class="tab-pane fade" id="project-autonomy" role="tabpanel" aria-labelledby="project-autonomy-tab" tabindex="0">
-              <%# formulaire %>
-              <%= simple_form_for :autonomy, method: :get do |f| %>
-                <%= f.input :installation_surface, label: "Surface de votre toit" %>
-                <%= f.submit "Search", class: 'btn btn-secondary' %>
-              <% end %>
-            </div>
-
-            <div class="tab-pane fade" id="project-bill" role="tabpanel" aria-labelledby="project-bill-tab" tabindex="0">
-              <%# formulaire %>
-              <%= simple_form_for :bill, method: :get do |f| %>
-                <%= f.input :installation_surface, label: "Surface de votre toit" %>
-                <%= f.input :reduce_bill, label: "Diminution souhaitée par mois" %>
-                <%= f.submit "Search", class: 'btn btn-secondary' %>
-              <% end %>
-            </div>
-          </div>
-
+  <div class="row bloc mt-4 p-3">
+    <div class="row">
+      <h2>Informations du site</h2>
+      <hr class="mt-1">
+    </div>
+    <div class="row mt-2">
+      <div class="col-6">
+        <div id="map" data-controller="map-home">
+          <div data-map-home-target="lat" data-value = "<%= @home.latitude %>"> </div>
+          <div data-map-home-target="long" data-value = "<%= @home.longitude %>"> </div>
         </div>
+      </div>
+      <div class="col-6">
+        <canvas data-controller="consumption-chart">
+          <div data-consumption-chart-target="consumptionHome" data-value = "<%= @home.home_consumption_months %>"> </div>
+        </canvas>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-6">
+        <small>Localistion</small>
+        <p><%=@home.address%></p>
+        <small>Consommation annuelle</small>
+        <p><%= @home.home_consumption_months.sum.to_i%> kW/h</p>
+        <small>Budget électrique annuelle</small>
+        <p><%= @home.price_consumption_months.sum.to_i%> €</p>
+      </div>
+      <div class="col-6 d-flex justify-content-end align-items-end">
+        <%= link_to "Modifier projet", edit_home_path(@home), class: 'btn btn-ghost' %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row bloc mt-4 p-3">
+    <div class="row">
+      <h2>Vos projets d'installation</h2>
+      <hr class="mt-1">
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-3">
+        <h4>Vous souhaitez ?</h4>
+      </div>
+      <div class="col-3">
+        <button type="button" class="btn btn-flat" data-bs-toggle="modal" data-bs-target="#investmentModal">Investir dans le solaire</button>
+      </div>
+      <div class="col-3">
+        <button type="button" class="btn btn-flat" data-bs-toggle="modal" data-bs-target="#autonomyModal">Gagner en autonomie</button>
+      </div>
+      <div class="col-3">
+        <button type="button" class="btn btn-flat" data-bs-toggle="modal" data-bs-target="#billModal">Réduire votre facture électrique</button>
       </div>
     </div>
 
-    <h4 class="mt-5">Scénarios d'installation :</h4>
-    <div class="my-3">
-      <strong>Ajouter une installation</strong>
-      <%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic_new %>
+    <div class="row mt-5">
+      <div id="cards-photovoltaics">
+        <%@photovoltaics.each do |photovoltaic|%>
+        <div class="card-photovoltaic">
+          <div class="card-photovoltaic-title">
+            <div class="row">
+              <div class="col d-flex justify-content-end align-items-center mt-2 me-3">
+                <%= link_to '<i class="fa-solid fa-magnifying-glass"></i>'.html_safe, home_photovoltaic_path(@home, photovoltaic)%>
+                <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#nbPanelModal<%=photovoltaic.id%>"><i class="fa-regular fa-pen-to-square mx-3"></i></button>
+                <%= link_to '<i class="fa-solid fa-trash"></i>'.html_safe, home_photovoltaic_path(@home, photovoltaic), data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
+              </div>
+            </div>
+            <div class="row p-4 photovoltaic-title">
+              <div class="col d-flex align-items-center text-center justify-content-center">
+                <h5><%=photovoltaic.name.upcase%></h5>
+              </div>
+            </div>
+          </div>
+
+          <div class="row carousel-photovoltaic p-2">
+            <div id="carouselExampleIndicators<%=photovoltaic.id%>" class="carousel carousel-dark slide">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators<%=photovoltaic.id%>" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators<%=photovoltaic.id%>" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators<%=photovoltaic.id%>" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active p-3">
+                  <div class="text-center">
+                    <strong>Caractéristiques énergétiques</strong>
+                  </div>
+                  <hr class="my-2">
+                  <small>Production annuelle</small>
+                  <p><%= photovoltaic.production_months.sum.to_i %> kW/h</p>
+                  <small>Production autoconsommée</small>
+                  <p><%=photovoltaic.self_consumption_months.sum.to_i%> kW/h</p>
+                  <small>Renvoi sur le réseau</small>
+                  <p><%=photovoltaic.back_energy_months.sum.to_i%> kW/h</p>
+                </div>
+                <div class="carousel-item p-3">
+                  <div class="text-center">
+                    <strong>Caractéristiques financières</strong>
+                  </div>
+                  <hr class="my-2">
+                  <small>Investissement</small>
+                  <p><%=photovoltaic.investment.to_i%> €</p>
+                  <small>ROI</small>
+                  <p><%=photovoltaic.roi%> années</p>
+                  <small>Bénéfice sur la durée de vie de l'installation</small>
+                  <p><%=photovoltaic.profit.to_i%> €</p>
+                  <small>Rendement annuel</small>
+                  <p><%=photovoltaic.annual_performance%> %</p>
+                </div>
+                <div class="carousel-item p-3">
+                  <div class="text-center">
+                    <strong>Caractéristiques de l'installation</strong>
+                  </div>
+                  <hr class="my-2">
+                  <small>Puissance crête</small>
+                  <p><%= photovoltaic.power %> kWc</p>
+                  <small>Nombre de panneaux</small>
+                  <p><%= photovoltaic.panel_number %> </p>
+                  <small>Surface utile</small>
+                  <p><%= (photovoltaic.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%# modal de modification %>
+          <div class="modal" id="nbPanelModal<%=photovoltaic.id%>" tabindex="-1" aria-labelledby="nbPanelModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="nbPanelModalLabel">Scénario par nombre de panneaux</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <%= render "photovoltaics/form", home: @home, photovoltaic: photovoltaic %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <%end%>
+      </div>
     </div>
-    <%@photovoltaics.each do |photovoltaic|%>
 
-        <div class="mt-4">
-          <h5>Nom: <%=photovoltaic.name%></h5>
-        </div>
-
-        <div>
-          <strong>Synthèse énergétique :</strong>
-          <p>Production annuelle (kW/h) : <%= photovoltaic.production_months.sum.to_i %></p>
-          <p>Production autoconsommée (kW/h) : <%=photovoltaic.self_consumption_months.sum.to_i%> </p>
-          <p>Renvoi sur le réseau (kW/h) : <%=photovoltaic.back_energy_months.sum.to_i%> </p>
-        </div>
-
-        <div>
-          <strong>Synthèse financiere :</strong>
-          <p> Investissement (€): <%=photovoltaic.investment%> </p>
-          <p> ROI (année): <%=photovoltaic.roi%> </p>
-          <p> Bénéfice sur la durée de vie de l'installation (€): <%=photovoltaic.profit%> </p>
-          <p> Rendement annuel (%): <%=photovoltaic.annual_performance%> </p>
-          <p> Rendement final (%): <%=photovoltaic.global_performance%> </p>
-        </div>
-
-        <div>
-          <strong>Caractéristiques de l'installation</strong>
-          <p>Puissance crète : <%= photovoltaic.power %> </p>
-          <p>Nombre de panneaux solaires : <%= photovoltaic.panel_number %> </p>
-          <p>Surface utile : <%= (photovoltaic.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
-        </div>
-
-        <div>
-          <%= link_to "Voir", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-primary' %>
-          <%= link_to "Supprimer", home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer cette installation?"} %>
-          <%= link_to "Modifier le nombre de panneaux", edit_home_photovoltaic_path(@home, photovoltaic), class: 'btn btn-secondary' %>
-        </div>
-    <%end%>
+    <div class="row mt-5">
+      <div class="col text-center">
+        <button type="button" class="btn btn-ghost" data-bs-toggle="modal" data-bs-target="#nbPanelModal">Ajouter un projet</button>
+      </div>
+    </div>
   </div>
 
+  <div class="row bloc mt-4 p-3">
+    <div class="row">
+      <h2>Comparaison des installations</h2>
+      <hr class="mt-1">
+    </div>
 
-
-  <div class="container" id="comparaison">
-    <h4 class="mt-5">Comparaison des installations :</h4>
-    <div class="my-3">
-
+    <div class="row mt-4">
       <%# onglets :%>
       <ul class="nav nav-pills nav-justified mb-3" id="overview-tab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -138,10 +177,20 @@
         <div class="tab-pane fade show active" id="overview-financial" role="tabpanel" aria-labelledby="overview-financial-tab" tabindex="0">
           <div data-controller="financial-overview" >
             <div data-financial-overview-target="overviewFinancial" data-value = "<%= @overview_financial_data %>"> </div>
-            <canvas data-financial-overview-target="investmentGraph" ></canvas>
-            <canvas data-financial-overview-target="roiGraph" ></canvas>
-            <canvas data-financial-overview-target="profitGraph" ></canvas>
-            <canvas data-financial-overview-target="performanceGraph" ></canvas>
+            <div class="row">
+              <div class="col-3">
+                <canvas data-financial-overview-target="investmentGraph" ></canvas>
+              </div>
+              <div class="col-3">
+                <canvas data-financial-overview-target="roiGraph" ></canvas>
+              </div>
+              <div class="col-3">
+                <canvas data-financial-overview-target="profitGraph" ></canvas>
+              </div>
+              <div class="col-3">
+                <canvas data-financial-overview-target="performanceGraph" ></canvas>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -151,9 +200,79 @@
           </canvas>
         </div>
       </div>
-
     </div>
   </div>
 
-
 </div>
+
+
+
+<%# liste des modales : %>
+<%# modal investissement %>
+<div class="modal" id="investmentModal" tabindex="-1" aria-labelledby="investmentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="investmentModalLabel">Investir dans le solaire</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for :investment, method: :get do |f| %>
+          <%= f.input :investment_amount, label: "Budget d'investissement" %>
+          <%= f.input :installation_surface, label: "Surface disponible" %>
+          <%= f.submit "GO!", class: 'btn btn-flat' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<%# modal autonomie %>
+<div class="modal" id="autonomyModal" tabindex="-1" aria-labelledby="autonomyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="autonomyModalLabel">Gagner en autonomie</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for :autonomy, method: :get do |f| %>
+          <%= f.input :installation_surface, label: "Surface de votre toit" %>
+          <%= f.submit "GO!", class: 'btn btn-flat' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<%# modal facture électrique %>
+<div class="modal" id="billModal" tabindex="-1" aria-labelledby="billModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="billModalLabel">Réduire votre facture électrique</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for :bill, method: :get do |f| %>
+          <%= f.input :installation_surface, label: "Surface de votre toit" %>
+          <%= f.input :reduce_bill, label: "Diminution souhaitée par mois" %>
+          <%= f.submit "GO!", class: 'btn btn-flat' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<%# modal nombre de panneaux %>
+<div class="modal" id="nbPanelModal" tabindex="-1" aria-labelledby="nbPanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="nbPanelModalLabel">Scénario par nombre de panneaux</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= render "photovoltaics/form", home: @home, photovoltaic: @photovoltaic_new %>
+      </div>
+    </div>
+  </div>
+</div>
+<%# fin des modales %>

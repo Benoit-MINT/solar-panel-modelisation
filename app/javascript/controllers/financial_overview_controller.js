@@ -17,7 +17,7 @@ export default class extends Controller {
       labels.push(`${financial_data_json[0][i]} kW/h`);
     }
 
-    const dataColors = ['green', 'blue', 'yellow', 'red', 'orange', 'purple', 'pink', 'cyan', 'magenta', 'lime']
+    const dataColors = ['rgba(255, 159, 64, 1)', 'rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(153, 102, 255, 1)', 'rgba(201, 203, 207, 1)', 'rgba(255, 129, 64, 1)', 'rgba(94, 142, 205, 1)', 'rgba(95, 122, 162, 1)', 'rgba(255, 99, 132, 1)']
 
     // on génère les différents graphiques financiers (on avait un pb d'échelle pour mettre sur un seul)
     for (let i = 0; i < titles.length; i++) {
@@ -44,12 +44,15 @@ export default class extends Controller {
           plugins: {
             title: {
               display: true,
-              text: titles[i]
+              text: titles[i],
             },
             legend: {
               display: false
             }
-          }
+          },
+          maintainAspectRatio: false,
+          responsive: true,
+          aspectRatio: 0.5,
         }
       };
 
