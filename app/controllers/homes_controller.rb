@@ -90,16 +90,18 @@ class HomesController < ApplicationController
 
   def overview_energy_data(photovoltaics)
     power = []
+    panel_number =[]
     overview_production = []
     overview_self_consumption = []
     overview_back_energy = []
     photovoltaics.each do |photovoltaic|
       power << photovoltaic.power
+      panel_number << photovoltaic.panel_number
       overview_production << photovoltaic.production_months.sum.to_i
       overview_self_consumption << photovoltaic.self_consumption_months.sum.to_i
       overview_back_energy << photovoltaic.back_energy_months.sum.to_i
     end
-    return [power, overview_production, overview_self_consumption, overview_back_energy].transpose.sort_by(&:first).transpose
+    return [power, panel_number, overview_production, overview_self_consumption, overview_back_energy].transpose.sort_by(&:first).transpose
   end
 
   def overview_financial_data(photovoltaics)
@@ -108,14 +110,16 @@ class HomesController < ApplicationController
     roi = []
     profit = []
     performance = []
+    panel_number = []
     photovoltaics.each do |photovoltaic|
       power << photovoltaic.power
       investment << photovoltaic.investment
       roi << photovoltaic.roi
       profit << photovoltaic.profit
       performance << photovoltaic.global_performance
+      panel_number << photovoltaic.panel_number
     end
-    return [power, investment, roi, profit, performance].transpose.sort_by(&:first).transpose
+    return [power, investment, roi, profit, performance, panel_number].transpose.sort_by(&:first).transpose
   end
 
 end
