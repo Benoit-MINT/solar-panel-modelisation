@@ -5,8 +5,10 @@ class Home < ApplicationRecord
   validates :address, presence: true
   validates :home_consumption_months, presence: true
   validates :home_consumption_months, length: { is: 12 }
-  validates :buy_price_electricity, presence: true
-  validates :sale_price_electricity, presence: true
+  validates :buy_price_electricity, presence: true, numericality: { greater_than: 0 }
+  validates :sale_price_electricity, presence: true, numericality: { greater_than: 0 }
+
+  validate :all_home_consumption_months_greater_than_zero
 
   geocoded_by :address
   # on limite les appels sur l'API :
@@ -32,8 +34,17 @@ class Home < ApplicationRecord
   end
 
   private
+
   def update_photovoltaics
     photovoltaics.each(&:update_attributes_dependent_on_home)
+  end
+
+  def all_home_consumption_months_greater_than_zero
+    home_consumption_months.each_with_index do |consumption, index|
+      if consumption <= 0
+        errors.add(:home_consumption_months, "La consommation du mois #{index + 1} doit être supérieure à zéro")
+      end
+    end
   end
 
 end

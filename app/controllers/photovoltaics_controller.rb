@@ -23,6 +23,7 @@ class PhotovoltaicsController < ApplicationController
     @home = Home.find(params[:home_id])
     @photovoltaic_new = Photovoltaic.new(photovoltaic_params)
     @photovoltaic_new.home_id = @home.id
+
     if params[:photovoltaic][:project_type].present?
       @photovoltaic_new.power_calculation
       @photovoltaic_new.name = PROJECT_NAMES[params[:photovoltaic][:project_type].to_i]

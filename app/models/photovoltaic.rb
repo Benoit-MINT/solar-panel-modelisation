@@ -9,7 +9,7 @@ class Photovoltaic < ApplicationRecord
 
   belongs_to :home
 
-  validates :power, presence: true
+  validates :panel_number, presence: true, numericality: { greater_than: 0 }
 
   def update_attributes_dependent_on_home
     home = self.home
