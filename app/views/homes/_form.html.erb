@@ -13,7 +13,7 @@
           <%= f.input :buy_price_electricity, label: "Prix d'achat du kW/h", input_html: { class: 'input-form' } %>
           <%= f.input :sale_price_electricity, label: "Prix de vente du kW/h", input_html: { class: 'input-form' }  %>
         </div>
-        <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}}, label: "Adresse du site", input_html: { class: 'input-form' }%>
+        <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}, class: 'input-form' }, label: "Adresse du site"%>
           <div id="addressModal">
             <div id="addressModalContent">
               <ul data-address-autocomplete-target="addressList">
