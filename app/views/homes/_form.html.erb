@@ -14,7 +14,7 @@
           <%= f.input :sale_price_electricity, label: "Prix de vente du kW/h"  %>
         </div>
           <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}}, label: "Adresse du site"%>
-        <ul id="address_list">
+        <ul data-address-autocomplete-target="addressList">
         </ul>
       </div>
 
