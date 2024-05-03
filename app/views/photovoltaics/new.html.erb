@@ -1,7 +1,7 @@
 <div class="container p-4">
   <div class="row">
     <%= link_to "Retour", home_path(@home), class: 'btn btn-ghost' %>
-    <div class="text-center">
+    <div class="text-center mb-3">
       <h2>Voici l'installation parfaite !</h2>
       <strong><%= @photovoltaic_project.panel_number %> panneaux solaires</strong>
       <p>pour un total de <%=(@photovoltaic_project.panel_number * Photovoltaic::AREA_BY_PANEL).round(2) %> m2</p>
@@ -12,8 +12,8 @@
   <%i=1%>
   <%panel = @photovoltaic_project.panel_number%>
   <%while panel > 0 && i <= 4 do %>
-    <div class="row mt-3">
-      <div class="col-8 mx-auto d-flex justify-content-around">
+    <div class="row">
+      <div class="col-8 mx-auto py-3 d-flex justify-content-around" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://jardinage.lemonde.fr/images/dossiers/2018-12/tuiles-081652.jpg);">
         <%[panel, 4].min.times do%>
           <%= image_tag "solar_pannel.png", alt: "Solar panel", class: "solar-panel-img" %>
           <%panel -= 1%>

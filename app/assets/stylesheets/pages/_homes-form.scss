@@ -13,17 +13,16 @@ hr {
   color: #636363;
 }
 
-// .address-list {
-//   display: block;
-//   position: absolute;
-//   background-color: white;
-//   border-radius: 3px;
-//   border: 1px solid #636363;
-//   padding: 10px;
-// }
+.input-form {
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #bebebe;
+  // box-shadow: rgba(0,0,0,0.2) 0 1px 1px;
+}
 
 #addressModal {
   display: none; /* Masque la fenêtre modale par défaut via none */
+  width: 627px;
 }
 
 #addressModalContent {
@@ -34,6 +33,7 @@ hr {
   padding: 10px;
   padding-left: 20px;
   padding-right: 20px;
+  width: inherit;
 }
 
 #addressModalContent ul {

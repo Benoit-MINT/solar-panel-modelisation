@@ -13,7 +13,7 @@ export default class extends Controller {
     this.addressListTarget.innerHTML = '';
     var addressSearch = this.addressTarget.value.replace(/[, ]+/g, '+');
     if (addressSearch.length > 4) {
-      var url = `https://api-adresse.data.gouv.fr/search/?q=${addressSearch}&limit=5`
+      var url = `https://api-adresse.data.gouv.fr/search/?q=${addressSearch}&limit=3`
       fetch(url)
       .then(response => response.json())
       .then((data) => {
@@ -21,7 +21,8 @@ export default class extends Controller {
           var label = suggestion.properties.label
           var lat = suggestion.geometry.coordinates[1]
           var lon = suggestion.geometry.coordinates[0]
-          this.addressListTarget.insertAdjacentHTML("beforeend", `<li class="my-1" data-action="click->address-autocomplete#select" data-address-autocomplete-target="latlon" data-value = "[${lat}, ${lon}]">${label}</li>`);
+          this.addressListTarget.insertAdjacentHTML("beforeend",
+          `<li class="my-1" data-action="click->address-autocomplete#select" data-address-autocomplete-target="latlon" data-value = "[${lat}, ${lon}]">${label}</li><hr class="my-1">`);
         });
       });
       document.getElementById('addressModal').style.display = 'block';
