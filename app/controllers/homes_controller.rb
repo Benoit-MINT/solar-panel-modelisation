@@ -35,7 +35,6 @@ class HomesController < ApplicationController
   end
 
   def create
-    raise
     @home_new = Home.new(home_params)
 
     if params[:home][:file].present?
@@ -60,7 +59,6 @@ class HomesController < ApplicationController
   end
 
   def update
-    raise
     @home = Home.find(params[:id])
     @home.update(home_params)
 

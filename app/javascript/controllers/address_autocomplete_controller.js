@@ -21,26 +21,22 @@ export default class extends Controller {
           var label = suggestion.properties.label
           var lat = suggestion.geometry.coordinates[1]
           var lon = suggestion.geometry.coordinates[0]
-          this.addressListTarget.insertAdjacentHTML("beforeend", `<li data-action="click->address-autocomplete#select" data-address-autocomplete-target="latlon" data-value = "[${lat}, ${lon}]">${label}</li>`);
+          this.addressListTarget.insertAdjacentHTML("beforeend", `<li class="my-1" data-action="click->address-autocomplete#select" data-address-autocomplete-target="latlon" data-value = "[${lat}, ${lon}]">${label}</li>`);
         });
-        // data.slice(0, 3).forEach((suggestion) => {
-        //   // ancien : datalist.insertAdjacentHTML("beforeend", `<option value="${suggestion.display_name}" data-address-autocomplete-target="latlon" data-value = "[${suggestion.lat}, ${suggestion.lon}, "${suggestion.display_name}"]">`);
-        //   // good : this.addressListTarget.insertAdjacentHTML("beforeend", `<li data-action="click->address-autocomplete#select" data-address-autocomplete-target="latlon" data-value = "[${suggestion.lat}, ${suggestion.lon}]">${suggestion.display_name}</li>`);
-        // });
       });
+      document.getElementById('addressModal').style.display = 'block';
     }
   }
 
   select(event) {
     this.addressTarget.value = event.target.innerText
-    // console.log(this.addressTarget.value)
 
     const latlon = this.latlonTarget.dataset.value
     const latlon_data = JSON.parse(latlon)
-    // console.log(latlon_data)
     this.map(latlon_data[0], latlon_data[1], 15)
 
     this.addressListTarget.innerHTML = ''
+    document.getElementById('addressModal').style.display = 'none';
   }
 
   map(lat, lon, zoom) {

@@ -12,3 +12,36 @@
 hr {
   color: #636363;
 }
+
+// .address-list {
+//   display: block;
+//   position: absolute;
+//   background-color: white;
+//   border-radius: 3px;
+//   border: 1px solid #636363;
+//   padding: 10px;
+// }
+
+#addressModal {
+  display: none; /* Masque la fenêtre modale par défaut via none */
+}
+
+#addressModalContent {
+  position: absolute;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #bebebe;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#addressModalContent ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#addressModalContent ul li {
+  cursor: pointer;
+}
