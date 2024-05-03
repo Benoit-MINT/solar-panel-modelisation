@@ -1,8 +1,8 @@
 class Home < ApplicationRecord
   has_many :photovoltaics, dependent: :destroy
 
-  validates :name, presence: :true
-  validates :address, presence: :true
+  validates :name, presence: true
+  validates :address, presence: true
   validates :home_consumption_months, presence: true
   validates :home_consumption_months, length: { is: 12 }
   validates :buy_price_electricity, presence: true

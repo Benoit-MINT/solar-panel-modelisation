@@ -18,16 +18,19 @@ export default class extends Controller {
       .then(response => response.json())
       .then((data) => {
         data.slice(0, 3).forEach((suggestion) => {
-          datalist.insertAdjacentHTML("beforeend", `<option value="${suggestion.display_name}" data-address-autocomplete-target="latlon" data-value = "[${suggestion.lat}, ${suggestion.lon}]">`);
-          // console.log(suggestion.lat)
+          // datalist.insertAdjacentHTML("beforeend", `<option value="${suggestion.display_name}" data-address-autocomplete-target="latlon" data-value = "[${suggestion.lat}, ${suggestion.lon}, "${suggestion.display_name}"]">`);
+          datalist.insertAdjacentHTML("beforeend", `<li data-action="click->address-autocomplete#select" data-address-autocomplete-target="latlon" data-value = "[${suggestion.lat}, ${suggestion.lon}]">${suggestion.display_name}</li>`);
         });
       });
     }
   }
 
-  select() {
+  select(event) {
+    this.addressTarget.value = event.srcElement.innerText
+    console.log(this.addressTarget.value)
     const latlon = this.latlonTarget.dataset.value
     const latlon_data = JSON.parse(latlon)
+    console.log(latlon_data)
     this.map(latlon_data[0], latlon_data[1], 15)
   }
 
