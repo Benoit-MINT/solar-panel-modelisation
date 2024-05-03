@@ -17,7 +17,6 @@
         </div>
         <div class="home-project-actions">
           <%= link_to "Voir", home_path(home), class: 'btn btn-ghost' %>
-          <%= link_to "Modifier", edit_home_path(home), class: 'btn btn-ghost' %>
           <%= link_to "Supprimer", home_path(home), class: 'btn btn-ghost', data: {turbo_method: :delete, turbo_confirm: "Voulez vous supprimer ce projet?"} %>
         </div>
       </div>

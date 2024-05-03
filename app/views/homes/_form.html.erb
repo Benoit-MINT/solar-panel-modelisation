@@ -1,61 +1,68 @@
-<div class="container bloc my-4 px-4">
-  <div class="row pt-3">
-      <h2>Informations du site</h2>
+<%= simple_form_for home do |f| %>
+  <div class="container bloc my-4">
+
+    <div class="row pt-3">
+        <h2>Informations du site</h2>
+        <hr class="my-2">
+    </div>
+
+    <div class="row align-items-center py-3" data-controller="address-autocomplete">
+      <div class="col-6 px-3">
+        <%= f.input :name, label: "Nom du projet" %>
+        <div class="d-flex justify-content-around">
+          <%= f.input :buy_price_electricity, label: "Prix d'achat du kW/h" %>
+          <%= f.input :sale_price_electricity, label: "Prix de vente du kW/h"  %>
+        </div>
+        <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}}, label: "Adresse du site"%>
+          <div id="addressModal">
+            <div id="addressModalContent">
+              <ul data-address-autocomplete-target="addressList">
+              </ul>
+            </div>
+          </div>
+      </div>
+
+      <div class="col-6 px-3 d-flex justify-content-center" data-address-autocomplete-target="map">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container bloc my-3">
+    <div class="row pt-3">
+      <h2>Informations de consommation</h2>
       <hr class="my-2">
-  </div>
+    </div>
 
-  <%= simple_form_for home do |f| %>
-  <div class="row align-items-center py-3" data-controller="address-autocomplete">
-
-    <div class="col-6 px-3">
-      <%= f.input :name, label: "Nom du projet" %>
-      <div class="d-flex justify-content-around">
-        <%= f.input :buy_price_electricity, label: "Prix d'achat du kW/h" %>
-        <%= f.input :sale_price_electricity, label: "Prix de vente du kW/h"  %>
-      </div>
-      <div data-action= "change->address-autocomplete#select">
-        <%= f.input :address, input_html: {data: {address_autocomplete_target: "address", action: "keyup->address-autocomplete#search"}, list: 'address_list'}, label: "Adresse du site"  %>
-        <datalist id="address_list">
-        </datalist>
+    <div class="row mt-4 justify-content-center text-center">
+      <div class="col-12">
+        <div id="cards-consumption">
+          <% (1..12).each do |month| %>
+            <%= f.input "home_consumption_months[]", input_html: { name: "home[home_consumption_months][#{month}]", value: home.home_consumption_months[month - 1]}, label: "#{Date::MONTHNAMES[month]}" %>
+          <% end %>
+        </div>
       </div>
     </div>
 
-    <div class="col-6 px-3 d-flex justify-content-center" data-address-autocomplete-target="map">
+    <div class="row mt-4 text-center">
+      <strong><i class="fa-solid fa-arrow-up"></i></strong>
+      <strong>Ajouter vos données mensuelles</strong>
+      <div class="my-4"><strong>OU</strong></div>
+      <strong>Importer votre fichier Linky</strong>
+      <strong><i class="fa-solid fa-arrow-down"></i></strong>
     </div>
 
-  </div>
-</div>
-
-<div class="container bloc my-5 px-4">
-  <div class="row pt-3">
-    <h2>Informations de consommation</h2>
-    <hr class="my-2">
-  </div>
-
-  <div class="row mt-4 justify-content-center text-center">
-    <div class="col-12">
-      <div id="cards-consumption">
-        <% (1..12).each do |month| %>
-          <%= f.input "home_consumption_months[]", input_html: { name: "home[home_consumption_months][#{month}]", value: home.home_consumption_months[month - 1]}, label: "#{Date::MONTHNAMES[month]}" %>
-        <% end %>
+    <div class="row my-4 justify-content-center text-center">
+      <div class="col-4">
+        <%= f.input :file, as: :file, label: false%>
       </div>
     </div>
   </div>
 
-  <div class="row mt-4 text-center">
-    <strong><i class="fa-solid fa-arrow-up"></i></strong>
-    <strong>Ajouter vos données mensuelles</strong>
-    <div class="my-4"><strong>OU</strong></div>
-    <strong>Importer votre fichier Linky</strong>
-    <strong><i class="fa-solid fa-arrow-down"></i></strong>
-  </div>
-
-  <div class="row mt-4 justify-content-center text-center">
-    <div class="col-4">
-      <%= f.input :file, as: :file, label: false%>
-      <%= f.submit 'Valider', class: 'btn btn-flat my-5' %>
+  <div class="container my-5">
+    <div class="row justify-content-center text-center">
+        <%= f.submit 'Valider', class: 'btn btn-flat' %>
     </div>
   </div>
 
-  <% end %>
-</div>
+<% end %>
