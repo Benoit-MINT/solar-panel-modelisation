@@ -14,7 +14,7 @@ export default class extends Controller {
 
     const labels = []
     for (let i = 0; i < financial_data_json[0].length; i++) {
-      labels.push(`${financial_data_json[5][i]} panneaux`);
+      labels.push(`${financial_data_json[5][i]}`);
     }
 
     const dataColors = ['rgba(255, 159, 64, 1)', 'rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(153, 102, 255, 1)', 'rgba(201, 203, 207, 1)', 'rgba(255, 129, 64, 1)', 'rgba(94, 142, 205, 1)', 'rgba(95, 122, 162, 1)', 'rgba(255, 99, 132, 1)']

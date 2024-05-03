@@ -17,10 +17,10 @@ export default class extends Controller {
     const datasets = []
     for (let i = 0; i < energy_data_json[0].length; i++) {
       datasets.push({
-          label: `${energy_data_json[1][i]} panneaux`,
+          label: `${energy_data_json[4][i]}`,
           backgroundColor: dataColors[i],
           stack: `Stack ${i}`,
-          data: [energy_data_json[2][i], energy_data_json[3][i], energy_data_json[4][i]]
+          data: [energy_data_json[1][i], energy_data_json[2][i], energy_data_json[3][i]]
       });
     }
 
